@@ -28,7 +28,7 @@ $Project "Client (HL2)"
 		$File	"c_team_objectiveresource.cpp"
 		$File	"c_team_objectiveresource.h"
 
-		$Folder	"HL2 DLL"
+		$Folder	"HL2 RETAIL DLL"
 		{
 			$File	"$SRCDIR\game\shared\hl2_retail\basehlcombatweapon_shared.cpp"
 			$File	"$SRCDIR\game\shared\hl2_retail\achievements_hl2.cpp"
