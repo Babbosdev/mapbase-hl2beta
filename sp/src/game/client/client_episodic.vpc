@@ -27,7 +27,7 @@ $Project "Client (Episodic)"
 		$File	"c_team_objectiveresource.cpp"
 		$File	"c_team_objectiveresource.h"
 
-		$Folder	"HL2 DLL"
+		$Folder	"HL2 CLIENT DLL"
 		{
 			$File	"$SRCDIR\game\shared\hl2_retail\basehlcombatweapon_shared.cpp"
 			$File	"$SRCDIR\game\shared\hl2_retail\episodic\achievements_ep1.cpp"
