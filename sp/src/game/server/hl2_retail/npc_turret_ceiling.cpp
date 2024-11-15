@@ -12,12 +12,12 @@
 #include "engine/IEngineSound.h"
 #include "ammodef.h"
 #include "Sprite.h"
-#include "hl2/hl2_player.h"
+#include "hl2_retail/hl2_player.h"
 #include "soundenvelope.h"
 #include "explode.h"
 #include "IEffects.h"
 #include "animation.h"
-#include "basehlcombatweapon_shared.h"
+#include "hl2_retail/basehlcombatweapon_shared.h"
 #include "iservervehicle.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

@@ -16,7 +16,7 @@
 
 
 #include "basegrenade_shared.h"
-#include "hl2mp/weapon_slam.h"
+#include "hl2_retail/hl2mp/weapon_slam.h"
 
 class CSoundPatch;
 

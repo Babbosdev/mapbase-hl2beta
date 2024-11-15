@@ -6,7 +6,7 @@
 
 #include "cbase.h"
 
-#include "npc_playercompanion.h"
+#include "hl2_retail/npc_playercompanion.h"
 
 #include "combine_mine.h"
 #include "fire.h"
@@ -25,7 +25,7 @@
 #include "ai_squad.h"
 #include "ai_squadslot.h"
 #include "ai_tacticalservices.h"
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 #include "filesystem.h"
 #include "collisionutils.h"
 #include "grenade_frag.h"

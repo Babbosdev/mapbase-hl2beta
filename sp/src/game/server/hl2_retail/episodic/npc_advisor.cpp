@@ -13,11 +13,11 @@
 #include "ai_motor.h"
 #include "ai_navigator.h"
 #include "beam_shared.h"
-#include "hl2_shareddefs.h"
+#include "hl2_retail/hl2_shareddefs.h"
 #include "ai_route.h"
 #include "npcevent.h"
 #include "gib.h"
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 #include "ndebugoverlay.h"
 #include "physics_saverestore.h"
 #include "saverestore_utlvector.h"
@@ -26,11 +26,11 @@
 #include "engine/IEngineSound.h"
 #include "movevars_shared.h"
 #include "particle_parse.h"
-#include "weapon_physcannon.h"
+#include "hl2_retail/weapon_physcannon.h"
 // #include "mathlib/noise.h"
 
 // this file contains the definitions for the message ID constants (eg ADVISOR_MSG_START_BEAM etc)
-#include "npc_advisor_shared.h"
+#include "hl2_retail/episodic/npc_advisor_shared.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

@@ -9,7 +9,7 @@
 #include "ai_basenpc.h"
 #include "ammodef.h"
 #include "ai_memory.h"
-#include "weapon_rpg.h"
+#include "hl2_retail/weapon_rpg.h"
 #include "effect_color_tables.h"
 #include "te_effect_dispatch.h"
 

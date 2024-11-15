@@ -38,7 +38,7 @@
 #include "shake.h"
 #include "beam_shared.h"
 #include "Sprite.h"
-#include "weapon_physcannon.h"
+#include "hl2_retail/weapon_physcannon.h"
 #include "physics_saverestore.h"
 #include "movevars_shared.h"
 #include "weapon_hl2mpbasehlmpcombatweapon.h"

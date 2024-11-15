@@ -16,7 +16,7 @@
 #include "ai_networkmanager.h"
 
 #ifdef HL2_DLL
-#include "npc_playercompanion.h"
+#include "hl2_retail\npc_playercompanion.h"
 #endif // HL2_DLL
 
 // memdbgon must be the last include file in a .cpp file!!!

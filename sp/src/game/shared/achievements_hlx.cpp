@@ -13,10 +13,10 @@
 #if ( defined( HL2_DLL ) || defined( HL2_EPISODIC ) ) && ( !defined ( PORTAL ) )
 
 #include "baseachievement.h"
-#include "prop_combine_ball.h"
-#include "combine_mine.h"
+#include "hl2_retail\prop_combine_ball.h"
+#include "hl2_retail\combine_mine.h"
 #include "basegrenade_shared.h"
-#include "basehlcombatweapon_shared.h"
+#include "hl2_retail/basehlcombatweapon_shared.h"
 #include "ammodef.h"
 
 class CAchievementHLXKillWithPhysicsObjects : public CBaseAchievement

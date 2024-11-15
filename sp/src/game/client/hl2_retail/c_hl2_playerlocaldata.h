@@ -15,7 +15,7 @@
 
 #include "dt_recv.h"
 
-#include "hl2/hl_movedata.h"
+#include "hl2_retail/hl_movedata.h"
 
 EXTERN_RECV_TABLE( DT_HL2Local );
 

@@ -20,7 +20,7 @@
 #include "entitylist.h"
 #include "npc_citizen17.h"
 #include "scriptedtarget.h"
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 #include "spotlightend.h"
 #include "beam_flags.h"
 

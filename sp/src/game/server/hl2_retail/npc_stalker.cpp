@@ -32,7 +32,7 @@
 #include "player.h"
 #include "entitylist.h"
 #include "ndebugoverlay.h"
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 #include "animation.h"
 #include "scriptedtarget.h"
 #include "vstdlib/random.h"

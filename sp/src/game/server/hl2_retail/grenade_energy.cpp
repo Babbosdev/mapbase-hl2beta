@@ -9,7 +9,7 @@
 #include "grenade_energy.h"
 #include "soundent.h"
 #include "player.h"
-#include "hl2_shareddefs.h"
+#include "hl2_retail/hl2_shareddefs.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

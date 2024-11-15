@@ -14,7 +14,7 @@
 #include "ai_memory.h"
 
 #ifdef HL2_DLL
-#include "ai_interactions.h"
+#include "hl2_retail\ai_interactions.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!

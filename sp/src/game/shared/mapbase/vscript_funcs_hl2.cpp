@@ -7,7 +7,7 @@
 
 #include "cbase.h"
 
-#include "hl2_gamerules.h"
+#include "hl2_retail\hl2_gamerules.h"
 #ifndef CLIENT_DLL
 #include "eventqueue.h"
 #endif

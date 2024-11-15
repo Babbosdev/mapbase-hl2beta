@@ -13,7 +13,7 @@
 #include "ai_memory.h"
 #include "ai_behavior_passenger_companion.h"
 #include "ai_squadslot.h"
-#include "npc_playercompanion.h"
+#include "hl2_retail/npc_playercompanion.h"
 #include "ai_route.h"
 #include "saverestore_utlvector.h"
 #include "cplane.h"

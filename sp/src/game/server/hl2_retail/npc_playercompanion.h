@@ -18,8 +18,8 @@
 #include "ai_behavior_fear.h"
 
 #ifdef HL2_EPISODIC
-#include "ai_behavior_operator.h"
-#include "ai_behavior_passenger_companion.h"
+#include "hl2_retail\ai_behavior_operator.h"
+#include "hl2_retail\episodic\ai_behavior_passenger_companion.h"
 #endif
 
 #ifdef MAPBASE

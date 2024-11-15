@@ -38,7 +38,7 @@
 #include "triggers.h"
 
 #ifdef HL2_EPISODIC
-#include "npc_alyx_episodic.h"
+#include "hl2_retail/npc_alyx_episodic.h"
 #endif // HL2_EPISODIC
 
 // memdbgon must be the last include file in a .cpp file!!!

@@ -8,8 +8,8 @@
 
 #include "cbase.h"
 #include "c_weapon__stubs.h"
-#include "basehlcombatweapon_shared.h"
-#include "c_basehlcombatweapon.h"
+#include "hl2_retail\basehlcombatweapon_shared.h"
+#include "hl2_retail\c_basehlcombatweapon.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

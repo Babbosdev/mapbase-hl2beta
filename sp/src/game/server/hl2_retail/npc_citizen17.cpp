@@ -12,7 +12,7 @@
 #include "globalstate.h"
 #include "soundent.h"
 #include "BasePropDoor.h"
-#include "weapon_rpg.h"
+#include "hl2_retail/weapon_rpg.h"
 #include "hl2_player.h"
 #include "items.h"
 
@@ -26,7 +26,7 @@
 #include "eventqueue.h"
 
 #ifdef MAPBASE
-#include "hl2_gamerules.h"
+#include "hl2_retail/hl2_gamerules.h"
 #include "mapbase/GlobalStrings.h"
 #include "collisionutils.h"
 #endif
@@ -35,7 +35,7 @@
 #include "ai_pathfinder.h"
 #include "ai_route.h"
 #include "ai_hint.h"
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 #include "ai_looktarget.h"
 #include "sceneentity.h"
 #include "tier0/icommandline.h"

@@ -7,7 +7,7 @@
 #include "cbase.h"
 #include "npcevent.h"
 #include "in_buttons.h"
-#include "weapon_rpg.h"
+#include "hl2_retail/weapon_rpg.h"
 
 #ifdef CLIENT_DLL
 	#include "c_hl2mp_player.h"
@@ -31,7 +31,7 @@
 	#include "triggers.h"
 	#include "smoke_trail.h"
 	#include "collisionutils.h"
-	#include "hl2_shareddefs.h"
+	#include "hl2_retail/hl2_shareddefs.h"
 #endif
 
 #include "debugoverlay_shared.h"

@@ -10,9 +10,9 @@
 #pragma once
 #endif
 
-#include "vehicle_jeep.h"
+#include "hl2_retail\vehicle_jeep.h"
 #include "ai_basenpc.h"
-#include "hl2_vehicle_radar.h"
+#include "hl2_retail\hl2_vehicle_radar.h"
 
 class CParticleSystem;
 class CVehicleCargoTrigger;

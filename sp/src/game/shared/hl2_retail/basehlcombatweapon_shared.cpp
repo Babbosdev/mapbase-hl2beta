@@ -5,7 +5,7 @@
 //=============================================================================//
 
 #include "cbase.h"
-#include "basehlcombatweapon_shared.h"
+#include "hl2_retail/basehlcombatweapon_shared.h"
 
 #include "hl2_player_shared.h"
 

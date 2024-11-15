@@ -11,7 +11,7 @@
 #include "ai_default.h"
 #include "ai_schedule.h"
 #include "ai_hull.h"
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 #include "ai_navigator.h"
 #include "ai_motor.h"
 #include "activitylist.h"

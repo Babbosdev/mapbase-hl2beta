@@ -6,11 +6,11 @@
 //=============================================================================//
 
 #include "cbase.h"
-#include "prop_combine_ball.h"
+#include "hl2_retail/prop_combine_ball.h"
 #include "props.h"
 #include "explode.h"
 #include "saverestore_utlvector.h"
-#include "hl2_shareddefs.h"
+#include "hl2_retail/hl2_shareddefs.h"
 #include "materialsystem/imaterial.h"
 #include "beam_flags.h"
 #include "physics_prop_ragdoll.h"
@@ -18,7 +18,7 @@
 #include "soundenvelope.h"
 #include "te_effect_dispatch.h"
 #include "ai_basenpc.h"
-#include "npc_bullseye.h"
+#include "hl2_retail/npc_bullseye.h"
 #include "filters.h"
 #include "SpriteTrail.h"
 #include "decals.h"

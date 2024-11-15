@@ -22,13 +22,13 @@
 #include "EntityFlame.h"
 #include "weapon_flaregun.h"
 #include "te_effect_dispatch.h"
-#include "prop_combine_ball.h"
+#include "hl2_retail/prop_combine_ball.h"
 #include "beam_shared.h"
 #include "npc_combine.h"
 #include "rumble_shared.h"
 #include "gamestats.h"
 #ifdef MAPBASE
-#include "npc_playercompanion.h"
+#include "hl2_retail/npc_playercompanion.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!

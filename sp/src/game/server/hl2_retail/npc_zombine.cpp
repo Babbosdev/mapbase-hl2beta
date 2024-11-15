@@ -27,13 +27,13 @@
 #include "props.h"
 #include "physics_npc_solver.h"
 #include "hl2_player.h"
-#include "hl2_gamerules.h"
+#include "hl2_retail/hl2_gamerules.h"
 
 #include "basecombatweapon.h"
 #include "basegrenade_shared.h"
 #include "grenade_frag.h"
 
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

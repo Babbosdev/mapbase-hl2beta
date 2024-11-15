@@ -44,8 +44,8 @@
 #endif
 
 #ifdef HL2_DLL
-#include "weapon_physcannon.h"
-#include "hl2_gamerules.h"
+#include "hl2_retail\weapon_physcannon.h"
+#include "hl2_retail\hl2_gamerules.h"
 #endif
 
 #ifdef PORTAL

@@ -12,7 +12,7 @@
 
 #include <vgui_controls/Panel.h>
 #include <vgui_controls/Label.h>
-#include "hl2_vehicle_radar.h"
+#include "hl2_retail/hl2_vehicle_radar.h"
 #include "c_vguiscreen.h"
 
 class CRadarContact

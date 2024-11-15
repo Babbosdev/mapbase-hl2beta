@@ -5,7 +5,7 @@
 //=====================================================================================//
 
 #include "ai_baseactor.h"
-#include "npc_playercompanion.h"
+#include "hl2_retail/npc_playercompanion.h"
 #include "ai_behavior_holster.h"
 #include "ai_behavior_functank.h"
 #include "soundenvelope.h"

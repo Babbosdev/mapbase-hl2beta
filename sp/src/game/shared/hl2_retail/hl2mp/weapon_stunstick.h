@@ -12,7 +12,7 @@
 #endif
 
 #ifdef CLIENT_DLL
-#include "c_basehlcombatweapon.h"
+#include "hl2_retail\c_basehlcombatweapon.h"
 #else
 #include "basebludgeonweapon.h"
 #endif

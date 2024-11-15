@@ -35,7 +35,7 @@
 #include "gameinterface.h"
 
 #ifdef HL2_DLL
-#include "hl2_player.h"
+#include "hl2_retail\hl2_player.h"
 #endif
 
 #ifdef MAPBASE

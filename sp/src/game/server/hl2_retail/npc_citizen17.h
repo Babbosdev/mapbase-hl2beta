@@ -8,7 +8,7 @@
 #ifndef	NPC_CITIZEN_H
 #define	NPC_CITIZEN_H
 
-#include "npc_playercompanion.h"
+#include "hl2_retail/npc_playercompanion.h"
 
 #include "ai_behavior_functank.h"
 #ifdef MAPBASE

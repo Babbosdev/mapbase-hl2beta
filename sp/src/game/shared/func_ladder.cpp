@@ -6,7 +6,7 @@
 #include "cbase.h"
 #include "func_ladder.h"
 #ifdef MAPBASE
-#include "hl_gamemovement.h"
+#include "hl2_retail\hl_gamemovement.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!

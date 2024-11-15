@@ -14,21 +14,21 @@
 #ifdef HL2MP
 	#include "c_hl2mp_player.h"
 #else
-	#include "hl2_player_shared.h"
+	#include "hl2_retail\hl2_player_shared.h"
 #endif
 #else
 #ifdef HL2MP
 	#include "hl2mp_player.h"
 #else
-	#include "hl2_player.h"
+	#include "hl2_retail/hl2_player.h"
 #endif
-	#include "grenade_tripmine.h"
-	#include "grenade_satchel.h"
+	#include "hl2_retail/grenade_tripmine.h"
+	#include "hl2_retail/grenade_satchel.h"
 	#include "entitylist.h"
 	#include "eventqueue.h"
 #endif
 
-#include "hl2mp/weapon_slam.h"
+#include "hl2_retail/hl2mp/weapon_slam.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

@@ -11,7 +11,7 @@
 #include "ai_basenpc.h"
 #include "decals.h"
 #include "filters.h"
-#include "npc_bullseye.h"
+#include "hl2_retail/npc_bullseye.h"
 #include "collisionutils.h"
 #include "igamesystem.h"
 

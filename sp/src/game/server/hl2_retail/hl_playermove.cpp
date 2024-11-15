@@ -8,10 +8,10 @@
 #include "player_command.h"
 #include "player.h"
 #include "igamemovement.h"
-#include "hl_movedata.h"
+#include "hl2_retail\hl_movedata.h"
 #include "ipredictionsystem.h"
 #include "iservervehicle.h"
-#include "hl2_player.h"
+#include "hl2_retail\hl2_player.h"
 #include "vehicle_base.h"
 #include "gamestats.h"
 

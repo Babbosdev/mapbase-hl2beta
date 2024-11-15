@@ -8,7 +8,7 @@
 #include "env_zoom.h"
 
 #ifdef HL2_DLL
-#include "hl2_player.h"
+#include "hl2_retail\hl2_player.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!

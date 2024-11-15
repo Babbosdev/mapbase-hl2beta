@@ -19,9 +19,9 @@
 #include "datacache/imdlcache.h"
 
 #ifdef HL2_DLL
-#include "npc_playercompanion.h"
+#include "hl2_retail\npc_playercompanion.h"
 #ifdef MAPBASE
-#include "hl2_player.h"
+#include "hl2_retail\hl2_player.h"
 #include "mapbase_matchers_base.h"
 #endif
 #endif // HL2_DLL

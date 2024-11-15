@@ -8,7 +8,7 @@
 
 // Redirect to HL2:DM's stunstick.
 // It has NPC support now.
-#include "hl2mp/weapon_stunstick.h"
+#include "hl2_retail/hl2mp/weapon_stunstick.h"
 
 #else
 #ifndef WEAPON_STUNSTICK_H

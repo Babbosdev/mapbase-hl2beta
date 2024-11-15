@@ -13,7 +13,7 @@
 #include "ai_squadslot.h"
 #include "ai_basenpc.h"
 #include "ai_navigator.h"
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 #include "ndebugoverlay.h"
 #include "explode.h"
 #include "bitstring.h"

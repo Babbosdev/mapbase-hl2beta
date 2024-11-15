@@ -19,7 +19,7 @@
 #include "ai_senses.h"
 
 #ifdef HL2_EPISODIC
-	#include "info_darknessmode_lightsource.h"
+	#include "hl2_retail/info_darknessmode_lightsource.h"
 #ifdef MAPBASE
 	#include "globalstate.h"
 #endif

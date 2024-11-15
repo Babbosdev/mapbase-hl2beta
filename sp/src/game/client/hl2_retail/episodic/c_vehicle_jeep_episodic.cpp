@@ -12,9 +12,9 @@
 #include "flashlighteffect.h"
 #include "c_baseplayer.h"
 #include "c_te_effect_dispatch.h"
-#include "hl2_vehicle_radar.h"
+#include "hl2_retail\hl2_vehicle_radar.h"
 #include "usermessages.h"
-#include "hud_radar.h"
+#include "hl2_retail\hud_radar.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

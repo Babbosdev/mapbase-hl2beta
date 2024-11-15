@@ -14,7 +14,7 @@
 #else
 	#include "hl2mp_player.h"
 	#include "te_effect_dispatch.h"
-	#include "prop_combine_ball.h"
+	#include "hl2_retail/prop_combine_ball.h"
 #endif
 
 #include "weapon_ar2.h"

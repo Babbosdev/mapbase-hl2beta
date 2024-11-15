@@ -9,11 +9,11 @@
 
 #if defined( CLIENT_DLL )
 
-#include "c_basehlplayer.h"
+#include "hl2_retail\c_basehlplayer.h"
 #define CHL2_Player C_BaseHLPlayer
 #else
 
-#include "hl2_player.h"
+#include "hl2_retail\hl2_player.h"
 
 #endif
 

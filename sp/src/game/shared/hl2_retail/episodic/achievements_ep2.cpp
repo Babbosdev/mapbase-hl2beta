@@ -12,8 +12,8 @@
 #include "achievementmgr.h"
 #include "baseachievement.h"
 #include "iservervehicle.h"
-#include "npc_antlion.h"
-#include "npc_hunter.h"
+#include "hl2_retail\npc_antlion.h"
+#include "hl2_retail/episodic/npc_hunter.h"
 
 
 class CAchievementEp2KillPoisonAntlion : public CBaseAchievement

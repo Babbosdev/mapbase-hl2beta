@@ -13,7 +13,7 @@
 
 
 #include "c_baseplayer.h"
-#include "c_hl2_playerlocaldata.h"
+#include "hl2_retail\c_hl2_playerlocaldata.h"
 
 #if !defined( HL2MP ) && defined ( MAPBASE )
 #include "mapbase/singleplayer_animstate.h"

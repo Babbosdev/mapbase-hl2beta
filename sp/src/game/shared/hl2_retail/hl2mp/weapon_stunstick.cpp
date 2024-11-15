@@ -15,7 +15,7 @@
 #include "debugoverlay_shared.h"
 
 #ifndef CLIENT_DLL
-	#include "npc_metropolice.h"
+	#include "hl2_retail/npc_metropolice.h"
 	#include "te_effect_dispatch.h"
 #endif
 

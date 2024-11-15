@@ -18,7 +18,7 @@
 #ifdef HL2MP
 #include "weapon_hl2mpbasehlmpcombatweapon.h"
 #else
-#include "basehlcombatweapon_shared.h"
+#include "hl2_retail\basehlcombatweapon_shared.h"
 #endif
 
 enum

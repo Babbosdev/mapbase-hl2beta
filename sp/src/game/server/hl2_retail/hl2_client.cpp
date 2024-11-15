@@ -14,8 +14,8 @@
 */
 
 #include "cbase.h"
-#include "hl2_player.h"
-#include "hl2_gamerules.h"
+#include "hl2_retail\hl2_player.h"
+#include "hl2_retail\hl2_gamerules.h"
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
 #include "entitylist.h"

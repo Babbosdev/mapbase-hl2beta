@@ -6,9 +6,9 @@
 //=============================================================================
 
 #include "cbase.h"
-#include "hl2_gamerules.h"
+#include "hl2_retail/hl2_gamerules.h"
 #include "ammodef.h"
-#include "hl2_shareddefs.h"
+#include "hl2_retail/hl2_shareddefs.h"
 
 #ifdef CLIENT_DLL
 
@@ -17,11 +17,11 @@
 	#include "game.h"
 	#include "gamerules.h"
 	#include "teamplay_gamerules.h"
-	#include "hl2_player.h"
+	#include "hl2_retail\hl2_player.h"
 	#include "voice_gamemgr.h"
 	#include "globalstate.h"
 	#include "ai_basenpc.h"
-	#include "weapon_physcannon.h"
+	#include "hl2_retail\weapon_physcannon.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!

@@ -82,8 +82,8 @@
 #include "haptics/haptic_utils.h"
 
 #ifdef HL2_DLL
-#include "combine_mine.h"
-#include "weapon_physcannon.h"
+#include "hl2_retail\combine_mine.h"
+#include "hl2_retail\weapon_physcannon.h"
 #ifdef MAPBASE
 #include "mapbase/GlobalStrings.h"
 #include "mapbase/matchers.h"

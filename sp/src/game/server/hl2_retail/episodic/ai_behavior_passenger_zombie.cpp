@@ -8,8 +8,8 @@
 #include "npcevent.h"
 #include "ai_motor.h"
 #include "ai_senses.h"
-#include "vehicle_jeep_episodic.h"
-#include "npc_alyx_episodic.h"
+#include "hl2_retail/episodic/vehicle_jeep_episodic.h"
+#include "hl2_retail/npc_alyx_episodic.h"
 #include "ai_behavior_passenger_zombie.h"
 
 #define JUMP_ATTACH_DIST_THRESHOLD			1000

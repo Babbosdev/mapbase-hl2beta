@@ -24,8 +24,8 @@
 #include "shot_manipulator.h"
 
 #ifdef HL2_DLL
-#include "ai_interactions.h"
-#include "hl2_gamerules.h"
+#include "hl2_retail\ai_interactions.h"
+#include "hl2_retail\hl2_gamerules.h"
 #endif // HL2_DLL
 
 #include "ai_network.h"
@@ -71,9 +71,9 @@
 #include "iservervehicle.h"
 #include "filters.h"
 #ifdef HL2_DLL
-#include "npc_bullseye.h"
-#include "hl2_player.h"
-#include "weapon_physcannon.h"
+#include "hl2_retail\npc_bullseye.h"
+#include "hl2_retail\hl2_player.h"
+#include "hl2_retail\weapon_physcannon.h"
 #endif
 #include "waterbullet.h"
 #include "in_buttons.h"
@@ -88,7 +88,7 @@
 #include "vstdlib/jobthread.h"
 
 #ifdef HL2_EPISODIC
-#include "npc_alyx_episodic.h"
+#include "hl2_retail/npc_alyx_episodic.h"
 #endif
 
 #ifdef PORTAL

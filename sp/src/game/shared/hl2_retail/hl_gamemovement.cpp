@@ -7,7 +7,7 @@
 #include "hl_gamemovement.h"
 #include "in_buttons.h"
 #include "utlrbtree.h"
-#include "hl2_shareddefs.h"
+#include "hl2_retail/hl2_shareddefs.h"
 
 #ifdef HL2MP
 #include "hl2mp_gamerules.h"

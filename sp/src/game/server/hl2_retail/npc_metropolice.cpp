@@ -18,7 +18,7 @@
 #include "hl2_player.h"
 #include "iservervehicle.h"
 #include "items.h"
-#include "hl2_gamerules.h"
+#include "hl2_retail/hl2_gamerules.h"
 #ifdef MAPBASE
 #include "grenade_frag.h"
 #include "mapbase/GlobalStrings.h"

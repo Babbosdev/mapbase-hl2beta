@@ -16,7 +16,7 @@
 #include "explode.h"
 #include "util.h"
 #include "in_buttons.h"
-#include "weapon_rpg.h"
+#include "hl2_retail/weapon_rpg.h"
 #include "shake.h"
 #include "ai_basenpc.h"
 #include "ai_squad.h"
@@ -24,7 +24,7 @@
 #include "triggers.h"
 #include "smoke_trail.h"
 #include "collisionutils.h"
-#include "hl2_shareddefs.h"
+#include "hl2_retail\hl2_shareddefs.h"
 #include "rumble_shared.h"
 #include "gamestats.h"
 

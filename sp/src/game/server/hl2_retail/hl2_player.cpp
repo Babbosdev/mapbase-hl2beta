@@ -10,14 +10,14 @@
 #include "game.h"
 #include "gamerules.h"
 #include "trains.h"
-#include "basehlcombatweapon_shared.h"
+#include "hl2_retail\basehlcombatweapon_shared.h"
 #include "vcollide_parse.h"
 #include "in_buttons.h"
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 #include "ai_squad.h"
 #include "igamemovement.h"
 #include "ai_hull.h"
-#include "hl2_shareddefs.h"
+#include "hl2_retail\hl2_shareddefs.h"
 #include "info_camera_link.h"
 #include "point_camera.h"
 #include "engine/IEngineSound.h"
@@ -30,7 +30,7 @@
 #include "effect_color_tables.h"
 #include "vphysics/player_controller.h"
 #include "player_pickup.h"
-#include "weapon_physcannon.h"
+#include "hl2_retail/weapon_physcannon.h"
 #include "script_intro.h"
 #include "effect_dispatch_data.h"
 #include "te_effect_dispatch.h" 
@@ -39,8 +39,8 @@
 #include "npc_barnacle.h"
 #include "entitylist.h"
 #include "env_zoom.h"
-#include "hl2_gamerules.h"
-#include "prop_combine_ball.h"
+#include "hl2_retail\hl2_gamerules.h"
+#include "hl2_retail/prop_combine_ball.h"
 #include "datacache/imdlcache.h"
 #include "eventqueue.h"
 #include "gamestats.h"
@@ -48,7 +48,7 @@
 #include "tier0/icommandline.h"
 
 #ifdef HL2_EPISODIC
-#include "npc_alyx_episodic.h"
+#include "hl2_retail/npc_alyx_episodic.h"
 #endif
 
 #ifdef PORTAL

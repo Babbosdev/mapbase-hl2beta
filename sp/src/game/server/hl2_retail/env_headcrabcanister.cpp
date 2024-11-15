@@ -6,7 +6,7 @@
 
 #include "cbase.h"
 #include "ai_hint.h"
-#include "env_headcrabcanister_shared.h"
+#include "hl2_retail\env_headcrabcanister_shared.h"
 #include "explode.h"
 #include "beam_shared.h"
 #include "SpriteTrail.h"

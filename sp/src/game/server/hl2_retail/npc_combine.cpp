@@ -11,7 +11,7 @@
 #include "ai_squadslot.h"
 #include "ai_squad.h"
 #include "ai_route.h"
-#include "ai_interactions.h"
+#include "hl2_retail/ai_interactions.h"
 #include "ai_tacticalservices.h"
 #include "soundent.h"
 #include "game.h"
@@ -26,7 +26,7 @@
 #include "globals.h"
 #include "grenade_frag.h"
 #include "ndebugoverlay.h"
-#include "weapon_physcannon.h"
+#include "hl2_retail/weapon_physcannon.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 #include "npc_headcrab.h"
 #ifdef MAPBASE
