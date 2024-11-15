@@ -73,20 +73,14 @@ $Project
 			$File	"mapbase\mapbase_autocubemap.cpp"
 		}
 		
-		$Folder "HL2 DLL"
+		$Folder "HL2 RETAIL DLL"
 		{
 			// Original stunstick files are conditional'd out in the HL2 VPCs
 			$File	"$SRCDIR\game\shared\hl2_retail\hl2mp\weapon_stunstick.cpp"
 			$File	"$SRCDIR\game\shared\hl2_retail\hl2mp\weapon_stunstick.h"
-		}
-		
-		$Folder	"HL2MP"
-		{
-			$Folder	"Weapons"
-			{
-				$File	"$SRCDIR\game\shared\hl2_retail\hl2mp\weapon_slam.cpp"
-				$File	"$SRCDIR\game\shared\hl2_retail\hl2mp\weapon_slam.h"
-			}
+			// HL2 DM SLAM
+			$File	"$SRCDIR\game\shared\hl2_retail\hl2mp\weapon_slam.cpp"
+			$File	"$SRCDIR\game\shared\hl2_retail\hl2mp\weapon_slam.h"
 		}
 	}
 
