@@ -21,6 +21,8 @@
 
 using namespace vgui;
 
+extern ConVar   EnableRetailHud;
+
 //-----------------------------------------------------------------------------
 // Purpose: Displays current ammunition level
 //-----------------------------------------------------------------------------
@@ -37,6 +39,7 @@ public:
 	void SetAmmo(int ammo, bool playAnimation);
 	void SetAmmo2(int ammo2, bool playAnimation);
 	virtual void Paint( void );
+	bool ShouldDraw();
 
 protected:
 	virtual void OnThink();
@@ -86,6 +89,19 @@ void CHudAmmo::Init( void )
 	else
 	{
 		SetLabelText(L"AMMO");
+	}
+}
+
+
+bool CHudAmmo::ShouldDraw(void)
+{
+	if (!EnableRetailHud.GetInt())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
 	}
 }
 
@@ -384,6 +400,20 @@ public:
 	void VidInit( void )
 	{
 	}
+
+	bool ShouldDraw(void)
+	{
+
+		if (!EnableRetailHud.GetInt())
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
 
 	void SetAmmo( int ammo )
 	{

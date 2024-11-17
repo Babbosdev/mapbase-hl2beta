@@ -34,6 +34,8 @@ using namespace vgui;
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
+extern ConVar   EnableRetailHud;
+
 #define INIT_HEALTH -1
 
 //-----------------------------------------------------------------------------
@@ -49,6 +51,7 @@ public:
 	virtual void VidInit( void );
 	virtual void Reset( void );
 	virtual void OnThink();
+	bool			ShouldDraw(void);
 			void MsgFunc_Damage( bf_read &msg );
 
 private:
@@ -167,4 +170,21 @@ void CHudHealth::MsgFunc_Damage( bf_read &msg )
 			g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthDamageTaken");
 		}
 	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: returns true if the panel should draw
+//-----------------------------------------------------------------------------
+bool CHudHealth::ShouldDraw()
+{
+
+	if (!EnableRetailHud.GetInt())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+
 }

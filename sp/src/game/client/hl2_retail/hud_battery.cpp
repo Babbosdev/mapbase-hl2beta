@@ -25,6 +25,8 @@
 
 #define INIT_BAT	-1
 
+extern ConVar   EnableRetailHud;
+
 //-----------------------------------------------------------------------------
 // Purpose: Displays suit power (armor) on hud
 //-----------------------------------------------------------------------------
@@ -92,6 +94,10 @@ void CHudBattery::VidInit( void )
 //-----------------------------------------------------------------------------
 bool CHudBattery::ShouldDraw( void )
 {
+
+	if (!EnableRetailHud.GetInt())
+		return false;
+
 	bool bNeedsDraw = ( m_iBat != m_iNewBat ) || ( GetAlpha() > 0 );
 
 	return ( bNeedsDraw && CHudElement::ShouldDraw() );

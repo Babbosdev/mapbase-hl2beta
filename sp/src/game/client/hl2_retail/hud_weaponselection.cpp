@@ -24,7 +24,9 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-ConVar hud_showemptyweaponslots( "hud_showemptyweaponslots", "1", FCVAR_ARCHIVE, "Shows slots for missing weapons when recieving weapons out of order" );
+ConVar retail_hud_showemptyweaponslots("retail_hud_showemptyweaponslots", "1", FCVAR_ARCHIVE, "Shows slots for missing weapons when recieving weapons out of order");
+
+extern ConVar   EnableRetailHud;
 
 #define SELECTION_TIMEOUT_THRESHOLD		0.5f	// Seconds
 #define SELECTION_FADEOUT_TIME			0.75f
@@ -258,6 +260,9 @@ bool CHudWeaponSelection::ShouldDraw()
 		}
 		return false;
 	}
+
+	if (!EnableRetailHud.GetInt())
+		return false;
 
 	bool bret = CBaseHudWeaponSelection::ShouldDraw();
 	if ( !bret )
@@ -645,7 +650,7 @@ void CHudWeaponSelection::Paint()
 						selectedWeapon = true;
 					}
 #ifdef MAPBASE
-					else if (!hud_showemptyweaponslots.GetBool() && !pWeapon)
+					else if (!retail_hud_showemptyweaponslots.GetBool() && !pWeapon)
 					{
 						// Revert the offset
 						xPos -= ( m_flMediumBoxWide + 5 ) * xModifiers[ i ];
@@ -692,7 +697,7 @@ void CHudWeaponSelection::Paint()
 						C_BaseCombatWeapon *pWeapon = GetWeaponInSlot( i, slotpos );
 						if ( !pWeapon )
 						{
-							if ( !hud_showemptyweaponslots.GetBool() )
+							if (!retail_hud_showemptyweaponslots.GetBool())
 								continue;
 							DrawBox( xpos, ypos, largeBoxWide, largeBoxTall, m_EmptyBoxColor, m_flAlphaOverride, bDrawBucketNumber ? i + 1 : -1 );
 						}
@@ -1206,7 +1211,7 @@ void CHudWeaponSelection::CycleToNextWeapon( void )
 		}
 
 		// Play the "cycle to next weapon" sound
-		pPlayer->EmitSound( "Player.WeaponSelectionMoveSlot" );
+		if (EnableRetailHud.GetInt()) pPlayer->EmitSound("Player.WeaponSelectionMoveSlot");
 	}
 }
 
@@ -1259,7 +1264,7 @@ void CHudWeaponSelection::CycleToPrevWeapon( void )
 		}
 
 		// Play the "cycle to next weapon" sound
-		pPlayer->EmitSound( "Player.WeaponSelectionMoveSlot" );
+		if (EnableRetailHud.GetInt()) pPlayer->EmitSound("Player.WeaponSelectionMoveSlot");
 	}
 }
 
@@ -1353,7 +1358,7 @@ void CHudWeaponSelection::FastWeaponSwitch( int iWeaponSlot )
 	else if ( pNextWeapon != pActiveWeapon )
 	{
 		// error sound
-		pPlayer->EmitSound( "Player.DenyWeaponSelection" );
+		if (EnableRetailHud.GetInt())	pPlayer->EmitSound("Player.DenyWeaponSelection");
 	}
 
 	if ( HUDTYPE_CAROUSEL != hud_fastswitch.GetInt() )
@@ -1386,7 +1391,7 @@ void CHudWeaponSelection::PlusTypeFastWeaponSwitch( int iWeaponSlot )
 		m_iSelectedSlot = iWeaponSlot;
 			
 #ifdef MAPBASE
-		if (!hud_showemptyweaponslots.GetBool())
+		if (!retail_hud_showemptyweaponslots.GetBool())
 		{
 			// Skip empty slots
 			int i = 0;
@@ -1412,7 +1417,7 @@ void CHudWeaponSelection::PlusTypeFastWeaponSwitch( int iWeaponSlot )
 			// jump to the zero position of the opposite slot. This also counts as our increment.
 			increment = -1;
 #ifdef MAPBASE
-			if (!hud_showemptyweaponslots.GetBool())
+			if (!retail_hud_showemptyweaponslots.GetBool())
 			{
 				// Skip empty slots
 				int iZeroPos = 0;
@@ -1451,7 +1456,7 @@ void CHudWeaponSelection::PlusTypeFastWeaponSwitch( int iWeaponSlot )
 		}
 			
 #ifdef MAPBASE
-		if (!hud_showemptyweaponslots.GetBool())
+		if (!retail_hud_showemptyweaponslots.GetBool())
 		{
 			// Skip empty slots
 			int i = m_iSelectedBoxPosition + increment;
@@ -1488,7 +1493,7 @@ void CHudWeaponSelection::PlusTypeFastWeaponSwitch( int iWeaponSlot )
 		else
 		{
 			// error sound
-			pPlayer->EmitSound( "Player.DenyWeaponSelection" );
+			if (EnableRetailHud.GetInt()) pPlayer->EmitSound("Player.DenyWeaponSelection");
 			return;
 		}
 	}
@@ -1597,5 +1602,5 @@ void CHudWeaponSelection::SelectWeaponSlot( int iSlot )
 		break;
 	}
 
-	pPlayer->EmitSound( "Player.WeaponSelectionMoveSlot" );
+	if (EnableRetailHud.GetInt()) pPlayer->EmitSound("Player.WeaponSelectionMoveSlot");
 }

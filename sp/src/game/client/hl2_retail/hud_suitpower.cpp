@@ -22,6 +22,8 @@ using namespace vgui;
 
 DECLARE_HUDELEMENT( CHudSuitPower );
 
+extern ConVar   EnableRetailHud;
+
 #define SUITPOWER_INIT -1
 
 //-----------------------------------------------------------------------------
@@ -64,6 +66,9 @@ bool CHudSuitPower::ShouldDraw()
 
 	C_BaseHLPlayer *pPlayer = (C_BaseHLPlayer *)C_BasePlayer::GetLocalPlayer();
 	if ( !pPlayer )
+		return false;
+
+	if (!EnableRetailHud.GetInt())
 		return false;
 
 	// needs draw if suit power changed or animation in progress

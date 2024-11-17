@@ -19,6 +19,8 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
+extern ConVar   EnableRetailHud;
+
 //-----------------------------------------------------------------------------
 // Purpose: Shows the flashlight icon
 //-----------------------------------------------------------------------------
@@ -29,6 +31,7 @@ class CHudFlashlight : public CHudElement, public vgui::Panel
 public:
 	CHudFlashlight( const char *pElementName );
 	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
+	bool ShouldDraw(void);
 
 protected:
 	virtual void Paint();
@@ -82,7 +85,24 @@ void CHudFlashlight::ApplySchemeSettings( vgui::IScheme *pScheme )
 //-----------------------------------------------------------------------------
 void CHudFlashlight::Reset( void )
 {
-	g_pClientMode->GetViewportAnimationController()->StartAnimationSequence( "SuitFlashlightOn" ); 
+	g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("SuitFlashlightOn");
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: returns true if the panel should draw
+//-----------------------------------------------------------------------------
+bool CHudFlashlight::ShouldDraw()
+{
+
+	if (!EnableRetailHud.GetInt())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -90,6 +110,7 @@ void CHudFlashlight::Reset( void )
 //-----------------------------------------------------------------------------
 void CHudFlashlight::SetFlashlightState( bool flashlightOn )
 {
+
 	if ( m_bFlashlightOn == flashlightOn )
 		return;
 
@@ -105,6 +126,8 @@ void CHudFlashlight::SetFlashlightState( bool flashlightOn )
 void CHudFlashlight::Paint()
 {
 #ifdef HL2_EPISODIC
+
+
 	C_BaseHLPlayer *pPlayer = (C_BaseHLPlayer *)C_BasePlayer::GetLocalPlayer();
 	if ( !pPlayer )
 		return;

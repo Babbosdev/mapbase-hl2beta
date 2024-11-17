@@ -28,7 +28,9 @@ int ScreenTransform( const Vector& point, Vector& screen );
 
 #define	HEALTH_WARNING_THRESHOLD	25
 
-static ConVar	hud_quickinfo( "hud_quickinfo", "1", FCVAR_ARCHIVE );
+static ConVar	hud_quickinfo_retail( "retail_hud_quickinfo", "0", FCVAR_ARCHIVE );
+
+extern ConVar   EnableRetailHud;
 
 extern ConVar crosshair;
 
@@ -323,7 +325,10 @@ void CHUDQuickInfo::Paint()
 		xCenter += 1;
 	}
 
-	if ( !hud_quickinfo.GetInt() )
+	if (!hud_quickinfo_retail.GetInt() )
+		return;
+
+	if (!EnableRetailHud.GetInt())
 		return;
 
 	int	sinScale = (int)( fabs(sin(gpGlobals->curtime*8.0f)) * 128.0f );
