@@ -19,6 +19,8 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
+#ifdef HL2_EPISODIC
+
 extern ConVar   EnableRetailHud;
 
 //-----------------------------------------------------------------------------
@@ -31,7 +33,6 @@ class CHudFlashlight : public CHudElement, public vgui::Panel
 public:
 	CHudFlashlight( const char *pElementName );
 	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
-	bool ShouldDraw(void);
 
 protected:
 	virtual void Paint();
@@ -56,9 +57,9 @@ private:
 
 using namespace vgui;
 
-#ifdef HL2_EPISODIC
+
 DECLARE_HUDELEMENT( CHudFlashlight );
-#endif // HL2_EPISODIC
+
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
@@ -88,22 +89,6 @@ void CHudFlashlight::Reset( void )
 	g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("SuitFlashlightOn");
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: returns true if the panel should draw
-//-----------------------------------------------------------------------------
-bool CHudFlashlight::ShouldDraw()
-{
-
-	if (!EnableRetailHud.GetInt())
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-
-}
 
 //-----------------------------------------------------------------------------
 // Purpose: data accessor
@@ -125,8 +110,18 @@ void CHudFlashlight::SetFlashlightState( bool flashlightOn )
 //-----------------------------------------------------------------------------
 void CHudFlashlight::Paint()
 {
-#ifdef HL2_EPISODIC
 
+	if (EnableRetailHud.GetInt())
+	{
+		SetPaintEnabled(false);
+		SetPaintBackgroundEnabled(false);
+		return;
+	}
+	else
+	{
+		SetPaintEnabled(true);
+		SetPaintBackgroundEnabled(true);
+	}
 
 	C_BaseHLPlayer *pPlayer = (C_BaseHLPlayer *)C_BasePlayer::GetLocalPlayer();
 	if ( !pPlayer )
@@ -181,5 +176,5 @@ void CHudFlashlight::Paint()
 		surface()->DrawFilledRect( xpos, ypos, xpos + m_flBarChunkWidth, ypos + m_flBarHeight );
 		xpos += (m_flBarChunkWidth + m_flBarChunkGap);
 	}
-#endif // HL2_EPISODIC
 }
+#endif // HL2_EPISODIC

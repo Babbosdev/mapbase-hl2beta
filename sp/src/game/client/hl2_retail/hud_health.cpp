@@ -51,8 +51,7 @@ public:
 	virtual void VidInit( void );
 	virtual void Reset( void );
 	virtual void OnThink();
-	bool			ShouldDraw(void);
-			void MsgFunc_Damage( bf_read &msg );
+	void MsgFunc_Damage( bf_read &msg );
 
 private:
 	// old variables
@@ -115,6 +114,20 @@ void CHudHealth::VidInit()
 //-----------------------------------------------------------------------------
 void CHudHealth::OnThink()
 {
+
+	if (!EnableRetailHud.GetInt())
+	{
+		SetPaintEnabled(false);
+		SetPaintBackgroundEnabled(false);
+		return;
+	}
+	else
+	{
+		SetPaintEnabled(true);
+		SetPaintBackgroundEnabled(true);
+	}
+
+
 	int newHealth = 0;
 	C_BasePlayer *local = C_BasePlayer::GetLocalPlayer();
 	if ( local )
@@ -170,21 +183,4 @@ void CHudHealth::MsgFunc_Damage( bf_read &msg )
 			g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthDamageTaken");
 		}
 	}
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: returns true if the panel should draw
-//-----------------------------------------------------------------------------
-bool CHudHealth::ShouldDraw()
-{
-
-	if (!EnableRetailHud.GetInt())
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-
 }

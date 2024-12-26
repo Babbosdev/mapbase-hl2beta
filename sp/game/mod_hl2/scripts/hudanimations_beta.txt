@@ -1,0 +1,452 @@
+// sample animation script
+//
+//
+// commands:
+//	Animate <panel name> <variable> <target value> <interpolator> <start time> <duration>
+//		variables:
+//			FgColor
+//			BgColor
+//			Position
+//			Size
+//			Blur		(hud panels only)
+//			TextColor	(hud panels only)
+//			Ammo2Color	(hud panels only)
+//			Alpha		(hud weapon selection only)
+//			SelectionAlpha  (hud weapon selection only)
+//			TextScan	(hud weapon selection only)
+//
+//		interpolator:
+//			Linear
+//			Accel - starts moving slow, ends fast
+//			Deaccel - starts moving fast, ends slow
+//
+//	RunEvent <event name> <start time>
+//		starts another even running at the specified time
+//
+//	StopEvent <event name> <start time>
+//		stops another event that is current running at the specified time
+//
+//	StopAnimation <panel name> <variable> <start time>
+//		stops all animations refering to the specified variable in the specified panel
+//
+//	StopPanelAnimations <panel name> <start time>
+//		stops all active animations operating on the specified panel
+//
+//
+// Useful game console commands:
+//	cl_Animationinfo <hudelement name> or <panelname> 
+//		displays all the animatable variables for the hud element
+//
+
+
+event LevelInit
+{
+}
+
+event WeaponPickup_Leak
+{
+	StopEvent OpenWeaponSelectionMenu_Leak	0.0
+	StopEvent CloseWeaponSelectionMenu_Leak	0.0
+
+	// make the display visible
+	Animate HudWeaponSelectionLeak Alpha 		"255" Linear 0.0 0.01
+	Animate HudWeaponSelectionLeak SelectionAlpha 	"255" Linear 0.0 0.01
+	Animate HudWeaponSelectionLeak FgColor		"0 0 0 0" Linear 0.0 0.01
+	Animate HudWeaponSelectionLeak TextColor	"0 0 0 0" Linear 0.0 0.01
+	Animate HudWeaponSelectionLeak TextScan		"0" Linear 0.0 0.01
+
+	// draw the weapon icon once the area has fully grown
+	Animate HudWeaponSelectionLeak FgColor		"FgColor" Linear 0.4 0.1
+	Animate HudWeaponSelectionLeak TextColor	"BrightFg" Linear 0.4 0.1
+	Animate HudWeaponSelectionLeak TextScan		"1" 	  Linear 0.4 0.4
+	
+	// make the text all blinky
+	Animate HudWeaponSelectionLeak TextColor	"FgColor" Accel 0.8 0.4
+	Animate HudWeaponSelectionLeak TextColor	"BrightFg" Linear 1.2 0.1
+	Animate HudWeaponSelectionLeak TextColor	"FgColor" Deaccel 1.3 0.4
+	Animate HudWeaponSelectionLeak TextColor	"BrightFg" Linear 1.7 0.1
+	Animate HudWeaponSelectionLeak TextColor	"0 0 0 0" Deaccel 1.8 1.5
+	
+	// hide the whole thing
+	runevent CloseWeaponSelectionMenu_Leak	2.0
+}
+
+event OpenWeaponSelectionMenu_Leak
+{
+	StopEvent CloseWeaponSelectionMenu_Leak	0.0
+	StopEvent WeaponPickup_Leak				0.0
+
+	// make the display visible
+	Animate HudWeaponSelectionLeak Alpha 		"128"		Linear 0.0 0.1
+	Animate HudWeaponSelectionLeak SelectionAlpha 	"255"	Linear 0.0 0.1
+	Animate HudWeaponSelectionLeak FgColor		"FgColor"	Linear 0.0 0.1
+	Animate HudWeaponSelectionLeak TextColor	"BrightFg"	Linear 0.0 0.1
+	Animate HudWeaponSelectionLeak TextScan		"1" 		Linear 0.0 0.1
+}
+
+event CloseWeaponSelectionMenu_Leak
+{
+	// hide the whole thing
+	Animate HudWeaponSelectionLeak FgColor		"0 0 0 0"		Linear 0.4 0.8
+	Animate HudWeaponSelectionLeak TextColor		"0 0 0 0"	Linear 0.4 0.8
+	Animate HudWeaponSelectionLeak Alpha		"0" 			Linear 0.0 0.8
+	Animate HudWeaponSelectionLeak SelectionAlpha 	"0" 		Linear 0.8 0.8
+}
+
+// ammo has been picked up
+event AmmoIncreased_Leak
+{
+	Animate HudAmmoLeak		FgColor	"BrightFg"		Linear	0.0	0.15
+	Animate HudAmmoLeak		FgColor	"FgColor"		Deaccel	0.15	1.5
+	Animate HudAmmoLeak		Blur		"5"			Linear	0.0	0.0 
+	Animate HudAmmoLeak		Blur		"0"			Accel		0.01	1.5 
+}
+
+// ammo has been decreased, but there is still some remaining
+event AmmoDecreased_Leak
+{
+	StopEvent AmmoIncreased	0.0
+	
+	Animate HudAmmoLeak		Blur		"7"			Linear	0.0	0.0
+	Animate HudAmmoLeak		Blur		"0"			Deaccel	0.1	1.5
+	
+	Animate HudAmmoLeak		TextColor	"BrightFg"		Linear	0.0	0.1
+	Animate HudAmmoLeak		TextColor	"FgColor"		Deaccel	0.1	0.75
+}
+
+
+// ammo has been picked up
+event AmmoIncreased_Leak
+{
+	Animate HudAmmoLeak		FgColor	"BrightFg"		Linear	0.0	0.15
+	Animate HudAmmoLeak		FgColor	"FgColor"		Deaccel	0.15	1.5
+	Animate HudAmmoLeak		Blur		"5"			Linear	0.0	0.0 
+	Animate HudAmmoLeak		Blur		"0"			Accel		0.01	1.5 
+}
+
+// ammo has been decreased, but there is still some remaining
+event AmmoDecreased_Leak
+{
+	StopEvent AmmoIncreased_Leak	0.0
+	
+	Animate HudAmmoLeak		Blur		"7"			Linear	0.0	0.0
+	Animate HudAmmoLeak		Blur		"0"			Deaccel	0.1	1.5
+	
+	Animate HudAmmoLeak		TextColor	"BrightFg"		Linear	0.0	0.1
+	Animate HudAmmoLeak		TextColor	"FgColor"		Deaccel	0.1	0.75
+}
+
+// primary ammo is zero
+event AmmoEmpty_Leak
+{
+	Animate HudAmmoLeak	FgColor		"BrightDamagedFg"	Linear	0.0	0.2
+	Animate HudAmmoLeak	FgColor		"DamagedFg"		Accel		0.2	1.2		
+}
+
+// ammo2 is the total ammo for a weapon that uses clip ammo
+event Ammo2Increased_Leak
+{
+	Animate HudAmmoLeak	ammo2color		"BrightFg"		Linear	0.0	0.2
+	Animate HudAmmoLeak	ammo2color		"FgColor"		Accel		0.2	1.2		
+}
+
+// total ammo has been decreased, but there is still some remaining
+event Ammo2Decreased_Leak
+{
+	Animate HudAmmoLeak	ammo2color		"BrightFg"		Linear	0.0	0.2
+	Animate HudAmmoLeak	ammo2color		"FgColor"		Accel		0.2	1.2		
+}
+
+// total ammo is zero
+event Ammo2Empty_Leak
+{
+	Animate HudAmmoLeak	ammo2color		"BrightDamagedFg"	Linear	0.0	0.2
+	Animate HudAmmoLeak	ammo2color		"DamagedFg"		Accel		0.2	1.2		
+}
+
+event AmmoSecondaryIncreased_Leak
+{
+	Animate HudAmmoSecondaryLeak		FgColor	"BrightFg"		Linear	0.0	0.15
+	Animate HudAmmoSecondaryLeak		FgColor	"FgColor"		Deaccel	0.15	1.5
+	Animate HudAmmoSecondaryLeak		Blur		"5"			Linear	0.0	0.0 
+	Animate HudAmmoSecondaryLeak		Blur		"0"			Accel		0.01	1.5 	
+}
+
+event AmmoSecondaryDecreased_Leak
+{
+	StopEvent AmmoSecondaryIncreased_Leak	0.0
+	
+	Animate HudAmmoSecondaryLeak		Blur		"7"			Linear	0.0	0.0
+	Animate HudAmmoSecondaryLeak		Blur		"0"			Deaccel	0.1	1.5
+	
+	Animate HudAmmoSecondaryLeak		TextColor	"BrightFg"		Linear	0.0	0.1
+	Animate HudAmmoSecondaryLeak		TextColor	"FgColor"		Deaccel	0.1	0.75
+}
+
+event AmmoSecondaryEmpty_Leak
+{
+	Animate HudAmmoSecondaryLeak		FgColor		"BrightDamagedFg"	Linear	0.0	0.2
+	Animate HudAmmoSecondaryLeak		FgColor		"DamagedFg"		Accel		0.2	1.2
+	Animate HudAmmoSecondaryLeak		Blur		"7"			Linear	0.0	0.0
+	Animate HudAmmoSecondaryLeak		Blur		"0"			Deaccel	0.1	1.5
+
+}
+
+// current weapon has been changed
+event WeaponChanged_Leak
+{
+	StopEvent AmmoIncreased_Leak	0.0
+	StopEvent AmmoDecreased_Leak	0.0
+	
+	Animate HudAmmoLeak		BgColor		"250 220 0 80"	Linear	0.0		0.1
+	Animate HudAmmoLeak		BgColor		"BgColor"		Deaccel	0.1		1.0
+	Animate HudAmmoLeak		FgColor		"BrightFg"		Linear	0.0		0.1
+	Animate HudAmmoLeak		FgColor		"FgColor"		Linear	0.2		1.5
+}
+
+// current weapon has been changed (during restore, so no blinky)
+event WeaponChangedRestore_Leak
+{
+	StopEvent AmmoIncreased_Leak	0.0
+	StopEvent AmmoDecreased_Leak	0.0
+	
+	Animate HudAmmoLeak		BgColor		"BgColor"		Deaccel	0.0	0.0
+	Animate HudAmmoLeak		FgColor		"FgColor"		Linear	0.0	0.0
+}
+
+// ran if we just changed to a weapon that needs clip ammo
+event WeaponUsesClips_Leak
+{
+	Animate HudAmmoLeak		Position	"r150 432"	Deaccel	0.0		0.4
+	Animate HudAmmoLeak		Size		"132 36"	Deaccel	0.0		0.4
+}
+
+// ran if we just changed to a weapon that does not use clip ammo
+event WeaponDoesNotUseClips_Leak
+{
+	Animate HudAmmoLeak		Position	"r118 432"	Deaccel	0.0		0.4
+	Animate HudAmmoLeak		Size		"100 36"	Deaccel	0.0		0.4
+}
+
+event WeaponUsesSecondaryAmmo_Leak
+{
+	StopAnimation 	HudAmmoLeak Position 0.0
+	StopAnimation 	HudAmmoLeak Size 0.0
+	StopPanelAnimations HudAmmoSecondaryLeak 0.0
+
+	Animate HudAmmoSecondaryLeak	BgColor		"250 220 0 60"	Linear	0.0		0.1
+	Animate HudAmmoSecondaryLeak	BgColor		"BgColor"		Deaccel	0.1		1.0
+	Animate HudAmmoSecondaryLeak	FgColor		"BrightFg"	Linear	0.0		0.1
+	Animate HudAmmoSecondaryLeak	FgColor		"FgColor"		Linear	0.2		1.5
+
+	Animate HudAmmoLeak		Position	"r222 432"	Deaccel	0.0		0.5
+	Animate HudAmmoLeak		Size		"132 36"	Deaccel	0.0		0.4
+}
+
+event WeaponUsesSecondaryAmmoRestore_Leak
+{
+	StopAnimation 	HudAmmoLeak Position 0.0
+	StopAnimation 	HudAmmoLeak Size 0.0
+	StopPanelAnimations HudAmmoSecondaryLeak 0.0
+
+	Animate HudAmmoSecondaryLeak	BgColor		"BgColor"		Deaccel	0.0	0.0
+	Animate HudAmmoSecondaryLeak	FgColor		"FgColor"		Linear	0.0	0.0
+
+	Animate HudAmmoLeak		Position	"r222 432"	Deaccel	0.0	0.0
+	Animate HudAmmoLeak		Size		"132 36"	Deaccel	0.0	0.0
+}
+
+event WeaponDoesNotUseSecondaryAmmo_Leak
+{
+	StopPanelAnimations	HudAmmoSecondaryLeak 	0.0
+	Animate HudAmmoSecondaryLeak	FgColor		"0 0 0 0"	Linear	0.0		0.4
+	Animate HudAmmoSecondaryLeak	BgColor		"0 0 0 0"	Linear	0.0		0.4
+//	Animate HudAmmoLeak		Position	"r150 432"	Deaccel	0.0		0.5
+}
+
+event WeaponDoesNotUseSecondaryAmmoRestore_Leak
+{
+	StopPanelAnimations	HudAmmoSecondaryLeak 	0.0
+	Animate HudAmmoSecondaryLeak	FgColor		"0 0 0 0"	Linear	0.0	0.0
+	Animate HudAmmoSecondaryLeak	BgColor		"0 0 0 0"	Linear	0.0	0.0
+}
+
+event SuitFlashlightOn_Leak
+{
+	Animate HudFlashlightLeak TextColor		"255 220 0 255"	Linear 0.0 0.1
+	Animate HudFlashlightLeak TextColor		"255 220 0 160"	Deaccel 0.1 0.75
+	Animate HudFlashlightLeak BgColor		"BgColor"	Linear 0.0 0.75
+}
+
+event SuitFlashlightOff_Leak
+{
+	StopEvent SuitFlashlightOn	0.0
+	Animate HudFlashlightLeak TextColor		"0 0 0 0"	Linear 0.0 0.4
+	Animate HudFlashlightLeak BgColor		"0 0 0 0"	Linear 0.0 0.4
+}
+
+event HealthIncreasedAbove20_Leak
+{
+	StopEvent	HealthLoop_Leak  0.0
+	StopEvent	HealthPulse_Leak 0.0
+
+	Animate	HudHealthLeak	BgColor	"BgColor"	Linear	0.0	0.0
+	
+	Animate	HudHealthLeak	TextColor "FgColor" Linear 0.0 0.04
+	Animate	HudHealthLeak	FgColor   "FgColor" Linear 0.0 0.03
+	
+	Animate	HudHealthLeak		Blur		"3"			Linear	0.0		0.1
+	Animate	HudHealthLeak		Blur		"0"			Deaccel	0.1		2.0
+}
+
+event HealthIncreasedBelow20_Leak
+{
+	Animate HudHealthLeak	FgColor		"BrightFg"	Linear	0.0		0.25
+	Animate HudHealthLeak	FgColor		"FgColor"		Linear	0.3		0.75
+	
+	Animate HudHealthLeak		Blur		"3"			Linear	0.0		0.1
+	Animate HudHealthLeak		Blur		"0"			Deaccel	0.1		2.0
+}
+
+event SuitPowerIncreasedAbove20_Leak
+{
+	StopEvent	SuitLoop_Leak 0.0
+	StopEvent	SuitPulse_Leak 0.0
+	StopEvent	SuitPowerZero_Leak	0.0
+
+	Animate	HudSuitLeak 	Alpha		"255"			Linear 0.0 0.0
+
+	Animate	HudSuitLeak		BgColor		"BgColor"	Linear	0.0	0.0
+	
+	Animate	HudSuitLeak 	TextColor	"FgColor"	Linear 0.0 0.05
+	Animate	HudSuitLeak		FgColor		"FgColor"	Linear 0.0 0.05
+	
+	Animate	HudSuitLeak		Blur		"3"			Linear	0.0		0.1
+	Animate	HudSuitLeak		Blur		"0"			Deaccel	0.1		2.0
+}
+
+
+event SuitPowerIncreasedBelow20_Leak
+{
+	StopEvent		SuitPowerZero_Leak	0.0
+	Animate	HudSuitLeak 	Alpha		"255"			Linear 0.0 0.0
+
+	Animate HudSuitLeak		FgColor		"BrightFg"	Linear	0.0		0.25
+	Animate HudSuitLeak		FgColor		"FgColor"	Linear	0.3		0.75
+	
+	Animate HudSuitLeak		Blur		"3"			Linear	0.0		0.1
+	Animate HudSuitLeak		Blur		"0"			Deaccel	0.1		2.0
+}
+
+event SuitPowerZero_Leak
+{
+	StopEvent	SuitLoop_Leak 0.0
+	StopEvent	SuitPulse_Leak 0.0
+	StopEvent	SuitArmorLow_Leak 0.0
+	StopEvent	SuitDamageTaken_Leak 0.0
+
+	Animate	HudSuitLeak Alpha		"0"			Linear 0.0 0.4
+}
+
+event HealthDamageTaken_Leak
+{
+	Animate HudHealthLeak	FgColor		"BrightFg"	Linear	0.0		0.25
+	Animate HudHealthLeak	FgColor		"FgColor"		Linear	0.3		0.75
+	
+	Animate HudHealthLeak		Blur		"3"			Linear	0.0		0.1
+	Animate HudHealthLeak		Blur		"0"			Deaccel	0.1		2.0
+	
+	Animate HudHealthLeak TextColor		"BrightFg"	Linear	0.0		0.1
+	Animate HudHealthLeak	TextColor		"FgColor"		Deaccel	0.1		1.2
+}
+
+event SuitDamageTaken_Leak
+{
+	Animate HudSuitLeak		FgColor	"BrightFg"	Linear	0.0		0.25
+	Animate HudSuitLeak		FgColor	"FgColor"		Linear	0.3		0.75
+	
+	Animate HudSuitLeak		Blur		"3"			Linear	0.0		0.1
+	Animate HudSuitLeak		Blur		"0"			Deaccel	0.1		2.0
+	
+	Animate HudSuitLeak		TextColor	"BrightFg"	Linear	0.0		0.1
+	Animate HudSuitLeak		TextColor	"FgColor"		Deaccel	0.1		1.2
+}
+
+// health has been damaged to below 20%
+event HealthLow_Leak
+{
+	StopEvent HealthDamageTaken_Leak	0.0
+	StopEvent HealthPulse_Leak	0.0
+	StopEvent HealthLoop_Leak	0.0	
+	
+	Animate HudHealthLeak	BgColor		"DamagedBg"		Linear	0.0		0.1
+	Animate HudHealthLeak	BgColor		"BgColor"		Deaccel	0.1		1.75
+	
+	Animate HudHealthLeak	FgColor		"BrightFg"	Linear	0.0		0.2
+	Animate HudHealthLeak	FgColor		"DamagedFg"		Linear	0.2		1.2
+	
+	Animate HudHealthLeak TextColor		"BrightFg"	Linear	0.0		0.1
+	Animate HudHealthLeak	TextColor		"DamagedFg"		Linear	0.1		1.2
+	
+	Animate HudHealthLeak		Blur		"5"			Linear	0.0		0.1
+	Animate HudHealthLeak		Blur		"3"			Deaccel	0.1		0.9
+
+	RunEvent HealthPulse_Leak	1.0
+}
+
+event HealthPulse_Leak
+{
+	Animate HudHealthLeak		Blur		"5"			Linear	0.0		0.1
+	Animate HudHealthLeak		Blur		"2"			Deaccel	0.1		0.8
+	Animate HudHealthLeak		TextColor	"BrightDamagedFg"	Linear	0.0		0.1
+	Animate HudHealthLeak		TextColor	"DamagedFg"		Deaccel	0.1		0.8
+	Animate HudHealthLeak		BgColor	"100 0 0 80"		Linear	0.0		0.1
+	Animate HudHealthLeak		BgColor	"BgColor"		Deaccel	0.1		0.8
+
+	RunEvent HealthLoop_Leak	0.8
+}
+
+// call to loop HealthPulse
+event HealthLoop_Leak
+{
+	RunEvent HealthPulse_Leak 0.0
+}
+
+
+// suit armor has been damaged to below 20%
+event SuitArmorLow_Leak
+{
+	StopEvent SuitDamageTaken_Leak 0.0
+	StopEvent SuitPulse_Leak	0.0
+	StopEvent SuitLoop_Leak	0.0
+	
+	Animate HudSuitLeak	BgColor		"DamagedBg"		Linear	0.0		0.1
+	Animate HudSuitLeak	BgColor		"BgColor"		Deaccel	0.1		1.75
+	
+	Animate HudSuitLeak	FgColor		"BrightFg"	Linear	0.0		0.2
+	Animate HudSuitLeak	FgColor		"DamagedFg"		Linear	0.2		1.2
+	
+	Animate HudSuitLeak	TextColor		"BrightFg"	Linear	0.0		0.1
+	Animate HudSuitLeak	TextColor		"DamagedFg"		Linear	0.1		1.2
+	
+	Animate HudSuitLeak		Blur		"5"			Linear	0.0		0.1
+	Animate HudSuitLeak		Blur		"3"			Deaccel	0.1		0.9
+	
+	RunEvent SuitPulse_Leak	1.0
+}
+
+event SuitPulse_Leak
+{
+	Animate HudSuitLeak		Blur		"5"			Linear	0.0		0.1
+	Animate HudSuitLeak		Blur		"2"			Deaccel	0.1		0.8
+	Animate HudSuitLeak		TextColor	"BrightDamagedFg"	Linear	0.0		0.1
+	Animate HudSuitLeak		TextColor	"DamagedFg"		Deaccel	0.1		0.8
+	Animate HudSuitLeak		BgColor	"100 0 0 80"	Linear	0.0		0.1
+	Animate HudSuitLeak		BgColor	"BgColor"		Deaccel	0.1		0.8
+	RunEvent SuitLoop_Leak	0.8
+}
+
+event SuitLoop_Leak
+{
+	RunEvent SuitPulse_Leak 0.0
+}

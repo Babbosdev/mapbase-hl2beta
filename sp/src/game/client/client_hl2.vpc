@@ -116,7 +116,14 @@ $Project "Client (HL2)"
 		
 		$Folder	"HL2 BETA DLL"
 		{
+		$File	"hl2_beta\parsemsg.cpp"
+		$File	"hl2_beta\parsemsg.h"
+		// Hud elements
 		$File	"hl2_beta\leak_hudweaponselection.cpp"
+		$File   "hl2_beta\leak_hudammo.cpp"
+		$File	"hl2_beta\leak_hudbattery.cpp"
+		$File   "hl2_beta\leak_hudhealth.cpp"
+		$File   "hl2_beta\leak_hudflashlight.cpp"
 		}
 		
 	}

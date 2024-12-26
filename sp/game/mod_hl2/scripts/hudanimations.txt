@@ -43,55 +43,6 @@ event LevelInit
 {
 }
 
-event WeaponPickup_Leak
-{
-	StopEvent OpenWeaponSelectionMenu	0.0
-	StopEvent CloseWeaponSelectionMenu	0.0
-
-	// make the display visible
-	Animate HudWeaponSelection Alpha 		"255" Linear 0.0 0.01
-	Animate HudWeaponSelection SelectionAlpha 	"255" Linear 0.0 0.01
-	Animate HudWeaponSelection FgColor		"0 0 0 0" Linear 0.0 0.01
-	Animate HudWeaponSelection TextColor	"0 0 0 0" Linear 0.0 0.01
-	Animate HudWeaponSelection TextScan		"0" Linear 0.0 0.01
-
-	// draw the weapon icon once the area has fully grown
-	Animate HudWeaponSelection FgColor		"FgColor" Linear 0.4 0.1
-	Animate HudWeaponSelection TextColor	"BrightFg" Linear 0.4 0.1
-	Animate HudWeaponSelection TextScan		"1" 	  Linear 0.4 0.4
-	
-	// make the text all blinky
-	Animate HudWeaponSelection TextColor	"FgColor" Accel 0.8 0.4
-	Animate HudWeaponSelection TextColor	"BrightFg" Linear 1.2 0.1
-	Animate HudWeaponSelection TextColor	"FgColor" Deaccel 1.3 0.4
-	Animate HudWeaponSelection TextColor	"BrightFg" Linear 1.7 0.1
-	Animate HudWeaponSelection TextColor	"0 0 0 0" Deaccel 1.8 1.5
-	
-	// hide the whole thing
-	runevent CloseWeaponSelectionMenu_Leak	2.0
-}
-
-event OpenWeaponSelectionMenu_Leak
-{
-	StopEvent CloseWeaponSelectionMenu_Leak	0.0
-	StopEvent WeaponPickup_Leak				0.0
-
-	// make the display visible
-	Animate HudWeaponSelection Alpha 		"128"		Linear 0.0 0.1
-	Animate HudWeaponSelection SelectionAlpha 	"255"	Linear 0.0 0.1
-	Animate HudWeaponSelection FgColor		"FgColor"	Linear 0.0 0.1
-	Animate HudWeaponSelection TextColor	"BrightFg"	Linear 0.0 0.1
-	Animate HudWeaponSelection TextScan		"1" 		Linear 0.0 0.1
-}
-
-event CloseWeaponSelectionMenu_Leak
-{
-	// hide the whole thing
-	Animate HudWeaponSelection FgColor		"0 0 0 0"		Linear 0.4 0.8
-	Animate HudWeaponSelection TextColor		"0 0 0 0"	Linear 0.4 0.8
-	Animate HudWeaponSelection Alpha		"0" 			Linear 0.0 0.8
-	Animate HudWeaponSelection SelectionAlpha 	"0" 		Linear 0.8 0.8
-}
 
 event WeaponHighlight
 {
