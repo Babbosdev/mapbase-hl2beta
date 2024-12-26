@@ -56,3 +56,7 @@ ConVar mp_fadetoblack(
 
 
 ConVar sv_hudhint_sound( "sv_hudhint_sound", "1", FCVAR_REPLICATED );
+
+
+ConVar weapons_2003leakbehaviour("beta_weapons_behaviour", "0", FCVAR_REPLICATED | FCVAR_ARCHIVE, "Make all weapons behave like the HALF-LIFE² Leak\n");
+ConVar weapons_2003leak_allowreloadsounds("beta_weapons_allowreloadsounds", "0", FCVAR_REPLICATED | FCVAR_ARCHIVE, "Allow reload sounds\n");

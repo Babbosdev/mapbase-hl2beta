@@ -32,7 +32,7 @@
 
 static 	CClassMemoryPool< CHudTexture >	 g_HudTextureMemoryPool( 128 );
 
-ConVar	EnableRetailHud("Retail_EnableHud", "0", FCVAR_ARCHIVE);
+ConVar	EnableRetailHud("retail_hud", "0", FCVAR_ARCHIVE,"Enable the retail HALF-LIFE² hud");
 
 //-----------------------------------------------------------------------------
 // Purpose: Parses the weapon txt files to get the sprites needed.

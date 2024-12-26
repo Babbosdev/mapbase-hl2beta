@@ -22,6 +22,8 @@
 ConVar hud_drawhistory_time( "hud_drawhistory_time", HISTORY_DRAW_TIME, 0 );
 ConVar hud_fastswitch( "hud_fastswitch", "0", FCVAR_ARCHIVE | FCVAR_ARCHIVE_XBOX );
 
+extern ConVar   EnableRetailHud;
+
 //-----------------------------------------------------------------------------
 // Purpose: Weapon Selection commands
 //-----------------------------------------------------------------------------
@@ -41,6 +43,22 @@ DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, NextWeapon, "CHudWeaponSelecti
 DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, PrevWeapon, "CHudWeaponSelection");
 DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, LastWeapon, "CHudWeaponSelection");
 
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot1Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot2Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot3Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot4Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot5Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot6Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot7Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot8Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot9Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot0Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot10Leak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, CloseLeak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, NextWeaponLeak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, PrevWeaponLeak, "CHudWeaponSelectionLeak");
+DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, LastWeaponLeak, "CHudWeaponSelectionLeak");
+
 HOOK_COMMAND( slot1, Slot1 );
 HOOK_COMMAND( slot2, Slot2 );
 HOOK_COMMAND( slot3, Slot3 );
@@ -56,6 +74,23 @@ HOOK_COMMAND( cancelselect, Close );
 HOOK_COMMAND( invnext, NextWeapon );
 HOOK_COMMAND( invprev, PrevWeapon );
 HOOK_COMMAND( lastinv, LastWeapon );
+
+HOOK_COMMAND(slot1Leak, Slot1Leak);
+HOOK_COMMAND(slot2Leak, Slot2Leak);
+HOOK_COMMAND(slot3Leak, Slot3Leak);
+HOOK_COMMAND(slot4Leak, Slot4Leak);
+HOOK_COMMAND(slot5Leak, Slot5Leak);
+HOOK_COMMAND(slot6Leak, Slot6Leak);
+HOOK_COMMAND(slot7Leak, Slot7Leak);
+HOOK_COMMAND(slot8Leak, Slot8Leak);
+HOOK_COMMAND(slot9Leak, Slot9Leak);
+HOOK_COMMAND(slot0Leak, Slot0Leak);
+HOOK_COMMAND(slot10Leak, Slot10Leak);
+HOOK_COMMAND(cancelselectLeak, CloseLeak);
+HOOK_COMMAND(invnextLeak, NextWeaponLeak);
+HOOK_COMMAND(invprevLeak, PrevWeaponLeak);
+HOOK_COMMAND(lastinvLeak, LastWeaponLeak);
+
 
 // instance info
 CBaseHudWeaponSelection *CBaseHudWeaponSelection::s_pInstance = NULL;
@@ -167,7 +202,8 @@ void CBaseHudWeaponSelection::ProcessInput()
 				input->ClearInputButton( IN_ATTACK );
 			}
 
-			engine->ClientCmd( "cancelselect\n" );
+			if(EnableRetailHud.GetInt())engine->ClientCmd( "cancelselect\n" );
+			if(!EnableRetailHud.GetInt())engine->ClientCmd("cancelselectleak\n");
 		}
 		return;
 	}
@@ -249,6 +285,13 @@ int	CBaseHudWeaponSelection::KeyInput( int down, ButtonCode_t keynum, const char
 		return 0;
 	}
 
+	if (IsInSelectionMode() && pszCurrentBinding && !stricmp(pszCurrentBinding, "cancelselectLeak"))
+	{
+		HideSelection();
+		// returning 0 indicates, we've handled it, no more action needs to be taken
+		return 0;
+	}
+
 	//Tony; check 0 as well, otherwise you have to have 0 bound to slot10 no matter what.
 	if ( down >= 1 && keynum >= KEY_0 && keynum <= KEY_9 )
 	{
@@ -284,6 +327,13 @@ void CBaseHudWeaponSelection::OnWeaponPickup( C_BaseCombatWeapon *pWeapon )
 //------------------------------------------------------------------------
 void CBaseHudWeaponSelection::UserCmd_Slot1(void)
 {
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot1leak\n");
+	}
+	else
+	{
+
 	if( HUDTYPE_CAROUSEL == hud_fastswitch.GetInt() )
 	{
 		UserCmd_LastWeapon();
@@ -292,10 +342,28 @@ void CBaseHudWeaponSelection::UserCmd_Slot1(void)
 	{
 		SelectSlot( 1 );
 	}
+
+	}
+}
+
+//------------------------------------------------------------------------
+// Command Handlers
+//------------------------------------------------------------------------
+void CBaseHudWeaponSelection::UserCmd_Slot1Leak(void)
+{
+		SelectSlot(1);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot2(void)
 {
+
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot2leak\n");
+	}
+	else
+	{
+
 	if( HUDTYPE_CAROUSEL == hud_fastswitch.GetInt() )
 	{
 		UserCmd_NextWeapon();
@@ -304,10 +372,24 @@ void CBaseHudWeaponSelection::UserCmd_Slot2(void)
 	{
 		SelectSlot( 2 );
 	}
+
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot2Leak(void)
+{
+		SelectSlot(2);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot3(void)
 {
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot3leak\n");
+	}
+	else
+	{
+
 	if( HUDTYPE_CAROUSEL == hud_fastswitch.GetInt() )
 	{
 		engine->ClientCmd( "phys_swap" );
@@ -316,10 +398,23 @@ void CBaseHudWeaponSelection::UserCmd_Slot3(void)
 	{
 		SelectSlot( 3 );
 	}
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot3Leak(void)
+{
+		SelectSlot(3);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot4(void)
 {
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot4leak\n");
+	}
+	else
+	{
+
 	if( HUDTYPE_CAROUSEL == hud_fastswitch.GetInt() )
 	{
 		UserCmd_PrevWeapon();
@@ -328,41 +423,134 @@ void CBaseHudWeaponSelection::UserCmd_Slot4(void)
 	{
 		SelectSlot( 4 );
 	}
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot4Leak(void)
+{
+		SelectSlot(4);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot5(void)
 {
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot5leak\n");
+	}
+	else
+	{
 	SelectSlot( 5 );
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot5Leak(void)
+{
+	SelectSlot(5);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot6(void)
 {
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot6leak\n");
+	}
+	else
+	{
 	SelectSlot( 6 );
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot6Leak(void)
+{
+	SelectSlot(6);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot7(void)
 {
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot7leak\n");
+	}
+	else
+	{
 	SelectSlot( 7 );
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot7Leak(void)
+{
+	SelectSlot(7);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot8(void)
 {
+
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot8leak\n");
+	}
+	else
+	{
 	SelectSlot( 8 );
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot8Leak(void)
+{
+	SelectSlot(8);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot9(void)
 {
+
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot9leak\n");
+	}
+	else
+	{
 	SelectSlot( 9 );
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot9Leak(void)
+{
+	SelectSlot(9);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot0(void)
 {
+
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot0leak\n");
+	}
+	else
+	{
 	SelectSlot( 0 );
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot0Leak(void)
+{
+	SelectSlot(0);
 }
 
 void CBaseHudWeaponSelection::UserCmd_Slot10(void)
 {
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("slot10leak\n");
+	}
+	else
+	{
 	SelectSlot( 10 );
+	}
+}
+
+void CBaseHudWeaponSelection::UserCmd_Slot10Leak(void)
+{
+	SelectSlot(10);
 }
 
 //-----------------------------------------------------------------------------
@@ -412,13 +600,11 @@ void CBaseHudWeaponSelection::SelectSlot( int iSlot )
 	{
 		return;
 	}
-
 	// If we're not allowed to draw, ignore weapon selections
 	if ( !BaseClass::ShouldDraw() )
 	{
 		return;
 	}
-
 	UpdateSelectionTime();
 	SelectWeaponSlot( iSlot );
 }
@@ -428,6 +614,25 @@ void CBaseHudWeaponSelection::SelectSlot( int iSlot )
 //-----------------------------------------------------------------------------
 void CBaseHudWeaponSelection::UserCmd_Close(void)
 {
+
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("cancelselectleak\n");
+	}
+	else
+	{
+
+	CancelWeaponSelection();
+
+	}
+}
+
+
+//-----------------------------------------------------------------------------
+// Purpose: Close the weapon selection
+//-----------------------------------------------------------------------------
+void CBaseHudWeaponSelection::UserCmd_CloseLeak(void)
+{
 	CancelWeaponSelection();
 }
 
@@ -436,12 +641,38 @@ void CBaseHudWeaponSelection::UserCmd_Close(void)
 //-----------------------------------------------------------------------------
 void CBaseHudWeaponSelection::UserCmd_NextWeapon(void)
 {
+
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("invnextLeak\n");
+	}
+	else
+	{
+
 	// If we're not allowed to draw, ignore weapon selections
-	if ( !BaseClass::ShouldDraw() )
+	if (!BaseClass::ShouldDraw())
 		return;
 
 	CycleToNextWeapon();
 	if( hud_fastswitch.GetInt() > 0 )
+	{
+		SelectWeapon();
+	}
+	UpdateSelectionTime();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Selects the next item in the weapon menu
+//-----------------------------------------------------------------------------
+void CBaseHudWeaponSelection::UserCmd_NextWeaponLeak(void)
+{
+	// If we're not allowed to draw, ignore weapon selections
+	if (!BaseClass::ShouldDraw())
+		return;
+
+	CycleToNextWeapon();
+	if (hud_fastswitch.GetInt() > 0)
 	{
 		SelectWeapon();
 	}
@@ -453,13 +684,40 @@ void CBaseHudWeaponSelection::UserCmd_NextWeapon(void)
 //-----------------------------------------------------------------------------
 void CBaseHudWeaponSelection::UserCmd_PrevWeapon(void)
 {
+
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("invprevLeak\n");
+	}
+	else
+	{
 	// If we're not allowed to draw, ignore weapon selections
-	if ( !BaseClass::ShouldDraw() )
+	if (!BaseClass::ShouldDraw())
 		return;
 
 	CycleToPrevWeapon();
 
 	if( hud_fastswitch.GetInt() > 0 )
+	{
+		SelectWeapon();
+	}
+
+	UpdateSelectionTime();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Selects the previous item in the menu
+//-----------------------------------------------------------------------------
+void CBaseHudWeaponSelection::UserCmd_PrevWeaponLeak(void)
+{
+	// If we're not allowed to draw, ignore weapon selections
+	if (!BaseClass::ShouldDraw())
+		return;
+
+	CycleToPrevWeapon();
+
+	if (hud_fastswitch.GetInt() > 0)
 	{
 		SelectWeapon();
 	}
@@ -472,8 +730,16 @@ void CBaseHudWeaponSelection::UserCmd_PrevWeapon(void)
 //-----------------------------------------------------------------------------
 void CBaseHudWeaponSelection::UserCmd_LastWeapon(void)
 {
+
+	if (!EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("lastinvLeak\n");
+	}
+	else
+	{
+
 	// If we're not allowed to draw, ignore weapon selections
-	if ( !BaseClass::ShouldDraw() )
+	if (!BaseClass::ShouldDraw())
 		return;
 
 	/*
@@ -482,6 +748,19 @@ void CBaseHudWeaponSelection::UserCmd_LastWeapon(void)
 		return;
 	}
 	*/
+
+	SwitchToLastWeapon();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Switches the last weapon the player was using
+//-----------------------------------------------------------------------------
+void CBaseHudWeaponSelection::UserCmd_LastWeaponLeak(void)
+{
+	// If we're not allowed to draw, ignore weapon selections
+	if (!BaseClass::ShouldDraw())
+		return;
 
 	SwitchToLastWeapon();
 }
@@ -515,9 +794,15 @@ void CBaseHudWeaponSelection::SetWeaponSelected( void )
 //-----------------------------------------------------------------------------
 void CBaseHudWeaponSelection::SelectWeapon( void )
 {
-	if ( !GetSelectedWeapon() )
+	if ( !GetSelectedWeapon() && EnableRetailHud.GetInt() )
 	{
 		engine->ClientCmd( "cancelselect\n" );
+		return;
+	}
+
+	if (!GetSelectedWeapon() && !EnableRetailHud.GetInt())
+	{
+		engine->ClientCmd("cancelselectLeak\n");
 		return;
 	}
 
@@ -536,7 +821,8 @@ void CBaseHudWeaponSelection::SelectWeapon( void )
 	
 		m_hSelectedWeapon = NULL;
 	
-		engine->ClientCmd( "cancelselect\n" );
+		if (EnableRetailHud.GetInt()) engine->ClientCmd("cancelselect\n");
+		if (!EnableRetailHud.GetInt()) engine->ClientCmd("cancelselectLeak\n");
 
 		// Play the "weapon selected" sound
 		player->EmitSound( "Player.WeaponSelected" );

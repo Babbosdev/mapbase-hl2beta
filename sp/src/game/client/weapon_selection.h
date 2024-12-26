@@ -76,6 +76,22 @@ public:
 	void UserCmd_LastWeapon( void );
 	void UserCmd_DropPrimary( void );
 
+	void UserCmd_Slot1Leak(void);
+	void UserCmd_Slot2Leak(void);
+	void UserCmd_Slot3Leak(void);
+	void UserCmd_Slot4Leak(void);
+	void UserCmd_Slot5Leak(void);
+	void UserCmd_Slot6Leak(void);
+	void UserCmd_Slot7Leak(void);
+	void UserCmd_Slot8Leak(void);
+	void UserCmd_Slot9Leak(void);
+	void UserCmd_Slot0Leak(void);
+	void UserCmd_Slot10Leak(void);
+	void UserCmd_CloseLeak(void);
+	void UserCmd_NextWeaponLeak(void);
+	void UserCmd_PrevWeaponLeak(void);
+	void UserCmd_LastWeaponLeak(void);
+
 	virtual void		SelectSlot( int iSlot );
 
 	virtual bool IsHudMenuTakingInput();

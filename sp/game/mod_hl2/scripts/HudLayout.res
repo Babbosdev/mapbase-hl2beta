@@ -303,6 +303,24 @@
 		"SelectionGrowTime"	"0.4"
 		"TextYPos" "64"
 	}
+	
+	HudWeaponSelectionLeak
+	{
+		"fieldName" "HudWeaponSelectionLeak"
+		"ypos" 	"16"
+		"visible" "1"
+		"enabled" "1"
+		"SmallBoxSize" "32"
+		"LargeBoxWide" "108"
+		"LargeBoxTall" "64"
+		"BoxGap" "8"
+		"SelectionNumberXPos" "4"
+		"SelectionNumberYPos" "4"
+		"SelectionGrowTime"	"0.4"
+		"IconXPos" "8"
+		"IconYPos" "8"
+		"TextYPos" "48"
+	}	
 
 	HudCrosshair
 	{
