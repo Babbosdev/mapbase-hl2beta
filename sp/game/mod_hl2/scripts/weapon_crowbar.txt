@@ -21,8 +21,8 @@ WeaponData
 	SoundData
 	{
 		"single_shot"		"Weapon_Crowbar.Single"
-		//"melee_hit"			"Weapon_Crowbar.Melee_Hit"
-		//"melee_hit_world"	"Weapon_Crowbar.Melee_HitWorld"
+		"melee_hit"			"Weapon_Crowbar.Melee_Hit"
+		"melee_hit_world"	"Weapon_Crowbar.Melee_Hit"
 	}
 
 	// Weapon Sprite data is loaded by the Client DLL.

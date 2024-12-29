@@ -146,22 +146,15 @@ void CHudHealthLeak::OnThink()
 	m_fFade = 200;
 	m_iHealth = x;
 
-	bool restored = MapLoad_LoadGame;
-	if (restored)
-	{
-	}
 
 	if (m_iHealth >= 20)
 	{
-		// Don't flash on save/load restoration
-		if (!restored)
-		{
-			g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthIncreasedAbove20_Leak");
-		}
+		g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthIncreasedAbove20_Leak");
 	}
-	else
+	else if (m_iHealth > 0)
 	{
 		g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthIncreasedBelow20_Leak");
+		g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthLow_Leak");
 	}
 
 	SetDisplayValue(m_iHealth);
@@ -191,12 +184,6 @@ void CHudHealthLeak::MsgFunc_DamageLeak(bf_read &msg)
 		{
 			// start the animation
 			g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthDamageTaken_Leak");
-
-			// see if our health is low
-			if (m_iHealth < 20)
-			{
-				g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthLow_Leak");
-			}
 		}
 	}
 }

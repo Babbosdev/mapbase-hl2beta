@@ -28,7 +28,7 @@ int ScreenTransform( const Vector& point, Vector& screen );
 
 #define	HEALTH_WARNING_THRESHOLD	25
 
-static ConVar	hud_quickinfo_retail( "retail_hud_quickinfo", "0", FCVAR_ARCHIVE );
+static ConVar	hud_quickinfo_retail( "retail_hud_quickinfo", "1", FCVAR_ARCHIVE );
 
 extern ConVar   EnableRetailHud;
 
@@ -277,7 +277,7 @@ void CHUDQuickInfo::Paint()
 				m_warnHealth = true;
 				
 				CLocalPlayerFilter filter;
-				C_BaseEntity::EmitSound( filter, SOUND_FROM_LOCAL_PLAYER, "HUDQuickInfo.LowHealth" );
+				if (EnableRetailHud.GetBool() && hud_quickinfo_retail.GetBool()) C_BaseEntity::EmitSound(filter, SOUND_FROM_LOCAL_PLAYER, "HUDQuickInfo.LowHealth");
 			}
 		}
 		else
@@ -305,7 +305,7 @@ void CHUDQuickInfo::Paint()
 				m_warnAmmo = true;
 
 				CLocalPlayerFilter filter;
-				C_BaseEntity::EmitSound( filter, SOUND_FROM_LOCAL_PLAYER, "HUDQuickInfo.LowAmmo" );
+				if (EnableRetailHud.GetBool() && hud_quickinfo_retail.GetBool()) C_BaseEntity::EmitSound(filter, SOUND_FROM_LOCAL_PLAYER, "HUDQuickInfo.LowAmmo");
 			}
 		}
 		else
@@ -336,7 +336,7 @@ void CHUDQuickInfo::Paint()
 	// Update our health
 	if ( m_healthFade > 0.0f )
 	{
-		DrawWarning( xCenter - (m_icon_lb->Width() * 2), yCenter, m_icon_lb, m_healthFade );
+		DrawWarning(xCenter - (m_icon_lb->Width() * 2), yCenter, m_icon_lb, m_healthFade);
 	}
 	else
 	{
@@ -353,14 +353,18 @@ void CHUDQuickInfo::Paint()
 		{
 			healthColor[3] = 255 * scalar;
 		}
-		
-		gHUD.DrawIconProgressBar( xCenter - (m_icon_lb->Width() * 2), yCenter, m_icon_lb, m_icon_lbe, ( 1.0f - healthPerc ), healthColor, CHud::HUDPB_VERTICAL );
+
+		int width = m_icon_lb->Width();
+		int height = m_icon_lb->Height();
+
+		gHUD.DrawIconProgressBar(xCenter - (m_icon_lb->Width() * 2), yCenter, width, height, m_icon_lb, (1.0f - healthPerc), healthColor, CHud::HUDPB_VERTICAL);
+		//gHUD.DrawIconProgressBar( xCenter - (m_icon_lb->Width() * 2), yCenter, m_icon_lb, m_icon_lbe, ( 1.0f - healthPerc ), healthColor, CHud::HUDPB_VERTICAL );
 	}
 
 	// Update our ammo
 	if ( m_ammoFade > 0.0f )
 	{
-		DrawWarning( xCenter + m_icon_rb->Width(), yCenter, m_icon_rb, m_ammoFade );
+		DrawWarning(xCenter + m_icon_rb->Width(), yCenter, m_icon_rb, m_ammoFade);
 	}
 	else
 	{
@@ -387,7 +391,11 @@ void CHUDQuickInfo::Paint()
 			ammoColor[3] = 255 * scalar;
 		}
 		
-		gHUD.DrawIconProgressBar( xCenter + m_icon_rb->Width(), yCenter, m_icon_rb, m_icon_rbe, ammoPerc, ammoColor, CHud::HUDPB_VERTICAL );
+		int width = m_icon_rb->Width();
+		int height = m_icon_rb->Height();
+
+		gHUD.DrawIconProgressBar(xCenter + m_icon_rb->Width(), yCenter, width, height, m_icon_rb, ammoPerc, ammoColor, CHud::HUDPB_VERTICAL);
+		//gHUD.DrawIconProgressBar( xCenter + m_icon_rb->Width(), yCenter, m_icon_rb, m_icon_rbe, ammoPerc, ammoColor, CHud::HUDPB_VERTICAL );
 	}
 }
 

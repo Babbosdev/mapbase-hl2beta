@@ -29,9 +29,11 @@ public:
 	CHudFlashlightLeak( const char *pElementName );
 	virtual void Init( void );
 	void SetFlashlightState( bool flashlightOn );
+	bool ShouldDraw(void);
 
 protected:
 	virtual void Paint();
+	
 
 private:
 	CPanelAnimationVar( vgui::HFont, m_hTextFont, "TextFont", "Default" );
@@ -65,6 +67,28 @@ void CHudFlashlightLeak::Init()
 {
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+bool CHudFlashlightLeak::ShouldDraw(void)
+{
+
+	if (EnableRetailHud.GetInt())
+	{
+		SetPaintEnabled(false);
+		SetPaintBackgroundEnabled(false);
+		return false;
+	}
+	else
+	{
+		SetPaintEnabled(true);
+		SetPaintBackgroundEnabled(true);
+		return true;
+	}
+
+	return true;
+
+}
 
 //-----------------------------------------------------------------------------
 // Purpose: data accessor
@@ -74,17 +98,6 @@ void CHudFlashlightLeak::SetFlashlightState( bool flashlightOn )
 	if ( m_bFlashlightOn == flashlightOn )
 		return;
 
-	if (EnableRetailHud.GetInt())
-	{
-		SetPaintEnabled(false);
-		SetPaintBackgroundEnabled(false);
-		return;
-	}
-	else
-	{
-		SetPaintEnabled(true);
-		SetPaintBackgroundEnabled(true);
-	}
 
 	if ( flashlightOn )
 	{
@@ -109,10 +122,7 @@ void CHudFlashlightLeak::Paint()
 	if ( !pPlayer )
 		return;
 
-
-
-
-	SetFlashlightState( pPlayer->IsEffectActive( EF_DIMLIGHT ) );
+	SetFlashlightState( pPlayer->IsEffectActive( EF_DIMLIGHT ) ); 
 
 	// draw our name
 	const wchar_t *text = L"FLASHLIGHT: ON";

@@ -442,6 +442,15 @@
 		"wide"	 "640"
 		"tall"	 "480"
 	}
+	
+	HUDQuickInfoLeak
+	{
+		"fieldName" "HUDQuickInfoLeak"
+		"visible" "1"
+		"enabled" "1"
+		"wide"	 "640"
+		"tall"	 "480"
+	}	
 
 	HudWeapon
 	{

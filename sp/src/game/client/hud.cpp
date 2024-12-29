@@ -1,8 +1,7 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+//========= Copyright Valve Corporation, MilkywayM16, All rights reserved. ============//
 //
-// Purpose: 
-//
-// $NoKeywords: $
+// This Code comes from this repo: https://github.com/MilkywayM16/hl2-old-hud
+// So Thanks MilkywayM16!
 //
 //=============================================================================//
 //

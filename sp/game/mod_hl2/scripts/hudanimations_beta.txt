@@ -328,7 +328,7 @@ event SuitPowerIncreasedAbove20_Leak
 
 event SuitPowerIncreasedBelow20_Leak
 {
-	StopEvent		SuitPowerZero_Leak	0.0
+	StopEvent SuitPowerZero_Leak	0.0
 	Animate	HudSuitLeak 	Alpha		"255"			Linear 0.0 0.0
 
 	Animate HudSuitLeak		FgColor		"BrightFg"	Linear	0.0		0.25
@@ -345,7 +345,7 @@ event SuitPowerZero_Leak
 	StopEvent	SuitArmorLow_Leak 0.0
 	StopEvent	SuitDamageTaken_Leak 0.0
 
-	Animate	HudSuitLeak Alpha		"0"			Linear 0.0 0.4
+	Animate	HudSuitLeak Alpha		"255"			Linear 0.0 0.4
 }
 
 event HealthDamageTaken_Leak

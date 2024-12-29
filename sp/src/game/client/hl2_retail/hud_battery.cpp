@@ -75,7 +75,16 @@ void CHudBattery::Init( void )
 //-----------------------------------------------------------------------------
 void CHudBattery::Reset( void )
 {
+
+	if (EnableRetailHud.GetInt())
+	{ 
 	SetLabelText(g_pVGuiLocalize->Find("#Valve_Hud_SUIT"));
+	}
+	else
+	{
+	SetLabelText(L"SUIT");
+	}
+
 	SetDisplayValue(m_iBat);
 }
 
@@ -94,7 +103,6 @@ void CHudBattery::VidInit( void )
 //-----------------------------------------------------------------------------
 bool CHudBattery::ShouldDraw( void )
 {
-
 	bool bNeedsDraw = ( m_iBat != m_iNewBat ) || ( GetAlpha() > 0 );
 
 	return ( bNeedsDraw && CHudElement::ShouldDraw() );
@@ -110,14 +118,11 @@ void CHudBattery::OnThink( void )
 
 	if (EnableRetailHud.GetInt())
 	{
-		SetPaintEnabled(false);
-		SetPaintBackgroundEnabled(false);
-		return;
+		SetLabelText(g_pVGuiLocalize->Find("#Valve_Hud_SUIT"));
 	}
 	else
 	{
-		SetPaintEnabled(true);
-		SetPaintBackgroundEnabled(true);
+		SetLabelText(L"SUIT");
 	}
 
 	if ( !m_iNewBat )

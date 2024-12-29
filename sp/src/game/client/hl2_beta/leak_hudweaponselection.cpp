@@ -45,6 +45,7 @@ public:
 
 	virtual void OpenSelection( void );
 	virtual void HideSelection( void );
+	virtual void LevelInit();
 
 protected:
 	virtual void OnThink();
@@ -111,9 +112,22 @@ CHudWeaponSelectionLeak::CHudWeaponSelectionLeak( const char *pElementName ) : C
 	SetParent( pParent );
 
 	SetHiddenBits( HIDEHUD_NEEDSUIT | HIDEHUD_PLAYERDEAD );
+}
 
-	// get the sequence time from the animation file
-	m_flWeaponPickupDisplayTime = g_pClientMode->GetViewportAnimationController()->GetAnimationSequenceLength("WeaponPickup_Leak");
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void CHudWeaponSelectionLeak::LevelInit()
+{
+	CHudElement::LevelInit();
+
+    // Babbosdev/Epicman87: Fixes the Level transition bug.
+
+	m_flPickupStartTime = 0.0f;
+	m_flWeaponPickupDisplayTime  = 0.0f;
+	m_hLastPickedUpWeapon = NULL;
+	g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("CloseWeaponSelectionMenu_Leak");
+
 }
 
 //-----------------------------------------------------------------------------
@@ -123,6 +137,9 @@ void CHudWeaponSelectionLeak::OnWeaponPickup( C_BaseCombatWeapon *pWeapon )
 {
 	if (!IsInSelectionMode())
 	{
+		// get the sequence time from the animation file
+		m_flWeaponPickupDisplayTime = g_pClientMode->GetViewportAnimationController()->GetAnimationSequenceLength("WeaponPickup_Leak");
+
 		// show the weapon pickup animation, but only if we're not in weapon selection mode
 		m_hLastPickedUpWeapon = pWeapon;
 		m_flPickupStartTime = gpGlobals->curtime;

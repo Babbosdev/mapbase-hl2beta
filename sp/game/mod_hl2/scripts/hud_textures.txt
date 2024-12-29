@@ -2,6 +2,64 @@
 {
 	TextureData
 	{
+	
+		"leakquickinfo_crosshair"
+		{
+				"file"		"sprites/qi_center"
+				"x"			"0"
+				"y"			"0"
+				"width"		"40"
+				"height"	"40"
+		}
+		"leakquickinfo_left"
+		{
+				"file"		"sprites/qi_center"
+				"x"			"0"
+				"y"			"40"
+				"width"		"28"
+				"height"	"50"
+		}
+		"leakquickinfo_right"
+		{
+				"file"		"sprites/qi_center"
+				"x"			"28"
+				"y"			"40"
+				"width"		"28"
+				"height"	"50"
+		}
+		"leakquickinfo_left_full"
+		{
+				"file"		"sprites/qi_center"
+				"x"			"28"
+				"y"			"40"
+				"width"		"28"
+				"height"	"50"
+		}
+		"leakquickinfo_right_full"
+		{
+				"file"		"sprites/qi_center"
+				"x"			"28"
+				"y"			"40"
+				"width"		"28"
+				"height"	"50"
+		}
+		"leakquickinfo_left_empty"
+		{
+				"file"		"sprites/qi_center"
+				"x"			"28"
+				"y"			"40"
+				"width"		"28"
+				"height"	"50"
+		}
+		"leakquickinfo_right_empty"
+		{
+				"file"		"sprites/qi_center"
+				"x"			"28"
+				"y"			"40"
+				"width"		"28"
+				"height"	"50"
+		}		
+// Retail Hud Textures		
 		"arrow"				[$WIN32]
 		{
 				"file"		"sprites/arrow"

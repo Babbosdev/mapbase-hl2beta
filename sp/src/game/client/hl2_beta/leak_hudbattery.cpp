@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -15,17 +15,23 @@
 //
 // battery.cpp
 //
-// implementation of CHudBatteryLeak class
+// implementation of CHudBattery class
 //
 #include "cbase.h"
 #include "hud.h"
 #include "hudelement.h"
 #include "hud_macros.h"
-#include "parsemsg.h"
 #include "hud_numericdisplay.h"
 #include "iclientmode.h"
+#include "vgui_controls/AnimationController.h"
+#include "vgui/ILocalize.h"
 
-#include <vgui_controls/AnimationController.h>
+// memdbgon must be the last include file in a .cpp file!!!
+#include "tier0/memdbgon.h"
+
+// TODO: Remove this
+
+#if 0
 
 #define INIT_BAT	-1
 
@@ -44,13 +50,12 @@ public:
 	void Reset( void );
 	void VidInit( void );
 	void OnThink( void );
-	void MsgFunc_BatteryLeak(bf_read &msg);
-
+	void MsgFunc_BatteryLeak(bf_read &msg );
+	bool ShouldDraw();
+	
 private:
 	int		m_iBat;	
 	int		m_iNewBat;
-	float	m_fFade;
-	int		m_iGhostBat;
 };
 
 DECLARE_HUDELEMENT( CHudBatteryLeak );
@@ -69,8 +74,10 @@ CHudBatteryLeak::CHudBatteryLeak( const char *pElementName ) : BaseClass(NULL, "
 //-----------------------------------------------------------------------------
 void CHudBatteryLeak::Init( void )
 {
-	HOOK_HUD_MESSAGE(CHudBatteryLeak, BatteryLeak);
+	HOOK_HUD_MESSAGE( CHudBatteryLeak, BatteryLeak);
 	Reset();
+	m_iBat		= INIT_BAT;
+	m_iNewBat   = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -78,11 +85,6 @@ void CHudBatteryLeak::Init( void )
 //-----------------------------------------------------------------------------
 void CHudBatteryLeak::Reset( void )
 {
-	m_iBat		= INIT_BAT;
-	m_iNewBat   = 0;
-	m_iGhostBat	= 0;
-	m_fFade		= 0;
-
 	SetLabelText(L"SUIT");
 	SetDisplayValue(m_iBat);
 }
@@ -96,6 +98,31 @@ void CHudBatteryLeak::VidInit( void )
 }
 
 //-----------------------------------------------------------------------------
+// Purpose: Save CPU cycles by letting the HUD system early cull
+// costly traversal.  Called per frame, return true if thinking and 
+// painting need to occur.
+//-----------------------------------------------------------------------------
+bool CHudBatteryLeak::ShouldDraw( void )
+{
+
+	if (EnableRetailHud.GetInt())
+	{
+		SetPaintEnabled(false);
+		SetPaintBackgroundEnabled(false);
+		//return;
+	}
+	else
+	{
+		SetPaintEnabled(true);
+		SetPaintBackgroundEnabled(true);
+	}
+
+	bool bNeedsDraw = ( m_iBat != m_iNewBat ) || ( GetAlpha() > 0 );
+
+	return ( bNeedsDraw && CHudElement::ShouldDraw() );
+}
+
+//-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
 void CHudBatteryLeak::OnThink( void )
@@ -103,17 +130,6 @@ void CHudBatteryLeak::OnThink( void )
 	if ( m_iBat == m_iNewBat )
 		return;
 
-	if (EnableRetailHud.GetInt())
-	{
-		SetPaintEnabled(false);
-		SetPaintBackgroundEnabled(false);
-		return;
-	}
-	else
-	{
-		SetPaintEnabled(true);
-		SetPaintBackgroundEnabled(true);
-	}
 
 	if ( !m_iNewBat )
 	{
@@ -143,8 +159,6 @@ void CHudBatteryLeak::OnThink( void )
 		}
 	}
 
-	m_fFade = 200;
-	m_iGhostBat = m_iNewBat;
 	m_iBat = m_iNewBat;
 
 	SetDisplayValue(m_iBat);
@@ -153,8 +167,8 @@ void CHudBatteryLeak::OnThink( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CHudBatteryLeak::MsgFunc_BatteryLeak(bf_read &msg)
+void CHudBatteryLeak::MsgFunc_BatteryLeak( bf_read &msg )
 {
-	//BEGIN_READ( pbuf, iSize );
-	m_iNewBat = READ_SHORT();
+	m_iNewBat = msg.ReadShort();
 }
+#endif
