@@ -116,8 +116,11 @@ $Project "Client (HL2)"
 		
 		$Folder	"HL2 BETA DLL"
 		{
+		
 		$File	"hl2_beta\parsemsg.cpp"
 		$File	"hl2_beta\parsemsg.h"
+		// Weapon Stub
+		$File	"hl2_beta\c_weapon__stubs_hl2_leak.cpp"
 		// Hud elements
 		$File	"hl2_beta\leak_hudweaponselection.cpp"
 		$File   "hl2_beta\leak_hudammo.cpp"

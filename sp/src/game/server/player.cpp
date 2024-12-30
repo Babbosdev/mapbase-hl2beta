@@ -131,6 +131,7 @@ ConVar	sv_noclipduringpause( "sv_noclipduringpause", "0", FCVAR_REPLICATED | FCV
 extern ConVar sv_maxunlag;
 extern ConVar sv_turbophysics;
 extern ConVar *sv_maxreplay;
+extern ConVar weapons_2003leakbehaviour;
 
 extern CServerGameDLL g_ServerGameDLL;
 
@@ -6465,6 +6466,60 @@ void CC_CH_CreateAirboat( void )
 
 static ConCommand ch_createairboat( "ch_createairboat", CC_CH_CreateAirboat, "Spawn airboat in front of the player.", FCVAR_CHEAT );
 
+void CBasePlayer::GiveRetailWeapons(void)
+{
+	// Give the player everything!
+	GiveAmmo(999, "Pistol");
+	GiveAmmo(999, "AR2");
+	GiveAmmo(999, "AR2AltFire");
+	GiveAmmo(999, "SMG1");
+	GiveAmmo(999, "Buckshot");
+	GiveAmmo(999, "smg1_grenade");
+	GiveAmmo(999, "rpg_round");
+	GiveAmmo(999, "grenade");
+	GiveAmmo(999, "357");
+	GiveAmmo(999, "XBowBolt");
+	GiveNamedItem("weapon_smg1");
+	GiveNamedItem("weapon_frag");
+	GiveNamedItem("weapon_crowbar");
+	GiveNamedItem("weapon_pistol");
+	GiveNamedItem("weapon_ar2");
+	GiveNamedItem("weapon_shotgun");
+	GiveNamedItem("weapon_physcannon");
+	GiveNamedItem("weapon_bugbait");
+	GiveNamedItem("weapon_rpg");
+	GiveNamedItem("weapon_357");
+	GiveNamedItem("weapon_crossbow");
+#ifdef HL2_EPISODIC
+	GiveNamedItem("weapon_magnade");
+	GiveNamedItem("weapon_hopwire");
+	GiveAmmo(5, "Hopwire");
+#endif
+}
+
+void CBasePlayer::GiveLeakWeapons(void)
+{
+	// Give the player everything!
+	GiveAmmo( 999,	"SmallRound");
+	GiveAmmo( 999,	"MediumRound");
+	GiveAmmo( 999,	"LargeRound");
+	GiveAmmo( 999,	"Buckshot");
+	GiveAmmo( 999,	"ar2_grenade");
+	GiveAmmo( 999,	"ml_grenade");
+	GiveAmmo( 999,	"grenade");
+	GiveAmmo( 150,	"GaussEnergy");
+
+	GiveNamedItem( "weapon_frag_old" );
+	GiveNamedItem( "weapon_crowbar" );
+	GiveNamedItem( "weapon_pistol_old" );
+	GiveNamedItem( "weapon_ar2_old" );
+	GiveNamedItem( "weapon_shotgun "/*_old*/ );
+	GiveNamedItem( "weapon_smg1_old" );
+	GiveNamedItem( "weapon_gauss"/*_old*/ );
+	GiveNamedItem( "weapon_physcannon" );
+	GiveNamedItem( "weapon_rpg" /*_old*/ );
+
+}
 
 //=========================================================
 //=========================================================
@@ -6491,7 +6546,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 			else
 			{
 				Vector forward = UTIL_YawToVector( EyeAngles().y );
-				Create("NPC_human_grunt", GetLocalOrigin() + forward * 128, GetLocalAngles());
+				Create("npc_combine_s", GetLocalOrigin() + forward * 128, GetLocalAngles());
 			}
 			break;
 		}
@@ -6516,34 +6571,15 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 
 		EquipSuit();
 
-		// Give the player everything!
-		GiveAmmo( 255,	"Pistol");
-		GiveAmmo( 255,	"AR2");
-		GiveAmmo( 5,	"AR2AltFire");
-		GiveAmmo( 255,	"SMG1");
-		GiveAmmo( 255,	"Buckshot");
-		GiveAmmo( 3,	"smg1_grenade");
-		GiveAmmo( 3,	"rpg_round");
-		GiveAmmo( 5,	"grenade");
-		GiveAmmo( 32,	"357" );
-		GiveAmmo( 16,	"XBowBolt" );
-#ifdef HL2_EPISODIC
-		GiveAmmo( 5,	"Hopwire" );
-#endif		
-		GiveNamedItem( "weapon_smg1" );
-		GiveNamedItem( "weapon_frag" );
-		GiveNamedItem( "weapon_crowbar" );
-		GiveNamedItem( "weapon_pistol" );
-		GiveNamedItem( "weapon_ar2" );
-		GiveNamedItem( "weapon_shotgun" );
-		GiveNamedItem( "weapon_physcannon" );
-		GiveNamedItem( "weapon_bugbait" );
-		GiveNamedItem( "weapon_rpg" );
-		GiveNamedItem( "weapon_357" );
-		GiveNamedItem( "weapon_crossbow" );
-#ifdef HL2_EPISODIC
-		// GiveNamedItem( "weapon_magnade" );
-#endif
+		if (!weapons_2003leakbehaviour.GetInt())
+		{
+		  GiveRetailWeapons();
+		}
+		else
+		{
+		  GiveLeakWeapons();
+		}
+		
 		if ( GetHealth() < 100 )
 		{
 			TakeHealth( 25, DMG_GENERIC );

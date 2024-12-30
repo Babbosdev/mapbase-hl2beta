@@ -11,8 +11,7 @@ WeaponData
 	"bucket_position"	"0"
 
 	"clip_size"			"18"
-	"primary_ammo"		"Pistol"
-	//"primary_ammo"		"MediumRound"
+	"primary_ammo"		"MediumRound"
 	"secondary_ammo"	"None"
 
 //	"weight"			"1"

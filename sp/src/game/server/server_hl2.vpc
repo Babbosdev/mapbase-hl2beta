@@ -264,9 +264,11 @@ $Project "Server (HL2)"
 		// Leak or Beta Entitys
 		$Folder	"HL2 LEAK DLL"
 		{
-		
+		 $File	"hl2_beta\leak_grenade_ar2.cpp"
+		 $File	"hl2_beta\leak_grenade_ar2.h"
+   		 // Weapons
 		 $File	"hl2_beta\leak_weapon_pistol.cpp"
-		
+		 $File	"hl2_beta\leak_weapon_smg1.cpp"
 		}
 	}
 }

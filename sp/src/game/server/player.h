@@ -493,6 +493,8 @@ public:
 
 	// custom player functions
 	virtual void			ImpulseCommands( void );
+	void					GiveRetailWeapons(void);
+	void					GiveLeakWeapons(void);
 	virtual void			CheatImpulseCommands( int iImpulse );
 	virtual bool			ClientCommand( const CCommand &args );
 

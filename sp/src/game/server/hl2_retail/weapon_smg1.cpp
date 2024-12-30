@@ -26,13 +26,16 @@ extern ConVar    sk_plr_dmg_smg1_grenade;
 extern ConVar    sk_npc_dmg_smg1_grenade;
 #endif
 
-class CWeaponSMG1 : public CHLSelectFireMachineGun
+extern ConVar weapons_2003leakbehaviour;
+extern ConVar weapons_2003leak_allowreloadsounds;
+
+class CWeaponSMG1Retail : public CHLSelectFireMachineGun
 {
 	DECLARE_DATADESC();
 public:
-	DECLARE_CLASS( CWeaponSMG1, CHLSelectFireMachineGun );
+	DECLARE_CLASS( CWeaponSMG1Retail, CHLSelectFireMachineGun );
 
-	CWeaponSMG1();
+	CWeaponSMG1Retail();
 
 	DECLARE_SERVERCLASS();
 	
@@ -45,6 +48,7 @@ public:
 
 	virtual void Equip( CBaseCombatCharacter *pOwner );
 	bool	Reload( void );
+	bool	Deploy(void);
 
 	float	GetFireRate( void ) { return 0.075f; }	// 13.3hz
 	int		CapabilitiesGet( void ) { return bits_CAP_WEAPON_RANGE_ATTACK1; }
@@ -71,20 +75,20 @@ protected:
 	float	m_flNextGrenadeCheck;
 };
 
-IMPLEMENT_SERVERCLASS_ST(CWeaponSMG1, DT_WeaponSMG1)
+IMPLEMENT_SERVERCLASS_ST(CWeaponSMG1Retail, DT_WeaponSMG1Retail)
 END_SEND_TABLE()
 
-LINK_ENTITY_TO_CLASS( weapon_smg1, CWeaponSMG1 );
+LINK_ENTITY_TO_CLASS( weapon_smg1, CWeaponSMG1Retail );
 PRECACHE_WEAPON_REGISTER(weapon_smg1);
 
-BEGIN_DATADESC( CWeaponSMG1 )
+BEGIN_DATADESC( CWeaponSMG1Retail )
 
 	DEFINE_FIELD( m_vecTossVelocity, FIELD_VECTOR ),
 	DEFINE_FIELD( m_flNextGrenadeCheck, FIELD_TIME ),
 
 END_DATADESC()
 
-acttable_t	CWeaponSMG1::m_acttable[] = 
+acttable_t	CWeaponSMG1Retail::m_acttable[] = 
 {
 	{ ACT_RANGE_ATTACK1,			ACT_RANGE_ATTACK_SMG1,			true },
 	{ ACT_RELOAD,					ACT_RELOAD_SMG1,				true },
@@ -166,23 +170,23 @@ acttable_t	CWeaponSMG1::m_acttable[] =
 #endif
 };
 
-IMPLEMENT_ACTTABLE(CWeaponSMG1);
+IMPLEMENT_ACTTABLE(CWeaponSMG1Retail);
 
 #ifdef MAPBASE
 // Allows Weapon_BackupActivity() to access the SMG1's activity table.
 acttable_t *GetSMG1Acttable()
 {
-	return CWeaponSMG1::m_acttable;
+	return CWeaponSMG1Retail::m_acttable;
 }
 
 int GetSMG1ActtableCount()
 {
-	return ARRAYSIZE(CWeaponSMG1::m_acttable);
+	return ARRAYSIZE(CWeaponSMG1Retail::m_acttable);
 }
 #endif
 
 //=========================================================
-CWeaponSMG1::CWeaponSMG1( )
+CWeaponSMG1Retail::CWeaponSMG1Retail( )
 {
 	m_fMinRange1		= 0;// No minimum range. 
 	m_fMaxRange1		= 1400;
@@ -193,7 +197,7 @@ CWeaponSMG1::CWeaponSMG1( )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CWeaponSMG1::Precache( void )
+void CWeaponSMG1Retail::Precache( void )
 {
 	UTIL_PrecacheOther("grenade_ar2");
 
@@ -203,7 +207,7 @@ void CWeaponSMG1::Precache( void )
 //-----------------------------------------------------------------------------
 // Purpose: Give this weapon longer range when wielded by an ally NPC.
 //-----------------------------------------------------------------------------
-void CWeaponSMG1::Equip( CBaseCombatCharacter *pOwner )
+void CWeaponSMG1Retail::Equip( CBaseCombatCharacter *pOwner )
 {
 	if( pOwner->Classify() == CLASS_PLAYER_ALLY )
 	{
@@ -218,9 +222,26 @@ void CWeaponSMG1::Equip( CBaseCombatCharacter *pOwner )
 }
 
 //-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+bool CWeaponSMG1Retail::Deploy(void)
+{
+	if (weapons_2003leakbehaviour.GetInt() == 1)
+	{
+		// temp code
+		engine->ServerCommand("give weapon_smg1_old\n");
+		engine->ServerCommand("use weapon_smg1_old\n");
+		UTIL_Remove(this);
+	}
+
+	return BaseClass::Deploy();
+
+}
+
+//-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CWeaponSMG1::FireNPCPrimaryAttack( CBaseCombatCharacter *pOperator, Vector &vecShootOrigin, Vector &vecShootDir )
+void CWeaponSMG1Retail::FireNPCPrimaryAttack( CBaseCombatCharacter *pOperator, Vector &vecShootOrigin, Vector &vecShootDir )
 {
 	// FIXME: use the returned number of bullets to account for >10hz firerate
 	WeaponSoundRealtime( SINGLE_NPC );
@@ -236,7 +257,7 @@ void CWeaponSMG1::FireNPCPrimaryAttack( CBaseCombatCharacter *pOperator, Vector 
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CWeaponSMG1::Operator_ForceNPCFire( CBaseCombatCharacter *pOperator, bool bSecondary )
+void CWeaponSMG1Retail::Operator_ForceNPCFire( CBaseCombatCharacter *pOperator, bool bSecondary )
 {
 	// Ensure we have enough rounds in the clip
 	m_iClip1++;
@@ -255,7 +276,7 @@ float GetCurrentGravity( void );
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CWeaponSMG1::Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCharacter *pOperator )
+void CWeaponSMG1Retail::Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCharacter *pOperator )
 {
 	switch( pEvent->event )
 	{
@@ -362,11 +383,13 @@ void CWeaponSMG1::Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatChar
 	}
 }
 
+
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 // Output : Activity
 //-----------------------------------------------------------------------------
-Activity CWeaponSMG1::GetPrimaryAttackActivity( void )
+Activity CWeaponSMG1Retail::GetPrimaryAttackActivity( void )
 {
 	if ( m_nShotsFired < 2 )
 		return ACT_VM_PRIMARYATTACK;
@@ -382,7 +405,7 @@ Activity CWeaponSMG1::GetPrimaryAttackActivity( void )
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-bool CWeaponSMG1::Reload( void )
+bool CWeaponSMG1Retail::Reload( void )
 {
 	bool fRet;
 	float fCacheTime = m_flNextSecondaryAttack;
@@ -401,10 +424,12 @@ bool CWeaponSMG1::Reload( void )
 	return fRet;
 }
 
+
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CWeaponSMG1::AddViewKick( void )
+void CWeaponSMG1Retail::AddViewKick( void )
 {
 	#define	EASY_DAMPEN			0.5f
 	#define	MAX_VERTICAL_KICK	1.0f	//Degrees
@@ -422,7 +447,7 @@ void CWeaponSMG1::AddViewKick( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CWeaponSMG1::SecondaryAttack( void )
+void CWeaponSMG1Retail::SecondaryAttack( void )
 {
 	// Only the player fires this way so we can cast
 	CBasePlayer *pPlayer = ToBasePlayer( GetOwner() );
@@ -499,7 +524,7 @@ void CWeaponSMG1::SecondaryAttack( void )
 //			flDist - 
 // Output : int
 //-----------------------------------------------------------------------------
-int CWeaponSMG1::WeaponRangeAttack2Condition( float flDot, float flDist )
+int CWeaponSMG1Retail::WeaponRangeAttack2Condition( float flDot, float flDist )
 {
 	CAI_BaseNPC *npcOwner = GetOwner()->MyNPCPointer();
 
@@ -600,7 +625,7 @@ int CWeaponSMG1::WeaponRangeAttack2Condition( float flDot, float flDist )
 }
 
 //-----------------------------------------------------------------------------
-const WeaponProficiencyInfo_t *CWeaponSMG1::GetProficiencyValues()
+const WeaponProficiencyInfo_t *CWeaponSMG1Retail::GetProficiencyValues()
 {
 	static WeaponProficiencyInfo_t proficiencyTable[] =
 	{
