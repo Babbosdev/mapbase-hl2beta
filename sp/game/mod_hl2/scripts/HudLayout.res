@@ -179,6 +179,33 @@
 		"PaintBackgroundType"	"2"
 	}
 
+	HudSuitPowerLeak
+	{
+		"fieldName" "HudSuitPowerLeak"
+		"visible" "1"
+		"enabled" "1"
+		"xpos"	"16"
+		"ypos"	"396"
+		"wide"	"102"
+		"tall"	"30"
+		
+		"AuxPowerLowColor" "255 0 0 220"
+		"AuxPowerHighColor" "255 220 0 220"
+		"AuxPowerDisabledAlpha" "70"
+
+		"BarInsetX" "8"
+		"BarInsetY" "8"
+		"BarWidth" "92"
+		"BarHeight" "4"
+		"BarChunkWidth" "6"
+		"BarChunkGap" "3"
+
+		"text_xpos" "8"
+		"text_ypos" "15"
+
+		"PaintBackgroundType"	"2"
+	}
+
 	HudPosture
 	{
 		"fieldName" 		"HudPosture"

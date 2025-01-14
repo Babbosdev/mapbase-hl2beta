@@ -450,3 +450,29 @@ event SuitLoop_Leak
 {
 	RunEvent SuitPulse_Leak 0.0
 }
+
+event SuitAuxPowerMax_Leak
+{
+	// hide the suit power
+	Animate HudSuitPowerLeak BgColor		"0 0 0 0"		Linear 0.0 0.4
+	Animate HudSuitPowerLeak AuxPowerColor	"0 0 0 0"		Linear 0.0 0.4
+}
+
+event SuitAuxPowerNotMax_Leak
+{
+	// show suit power
+	Animate HudSuitPowerLeak BgColor		"BgColor"		Linear 0.0 0.4
+	Animate HudSuitPowerLeak AuxPowerColor	"255 220 0 220"		Linear 0.0 0.4
+}
+
+event SuitAuxPowerDecreasedBelow25_Leak
+{
+	// make color red
+	Animate HudSuitPowerLeak AuxPowerColor	"255 0 0 220"		Linear 0.0 0.4
+}
+
+event SuitAuxPowerIncreasedAbove25_Leak
+{
+	// make colr bright
+	Animate HudSuitPowerLeak AuxPowerColor	"255 220 0 220"		Linear 0.0 0.4
+}

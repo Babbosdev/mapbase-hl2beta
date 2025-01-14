@@ -128,6 +128,8 @@ $Project "Client (HL2)"
 		$File   "hl2_beta\leak_hudhealth.cpp"
 		$File   "hl2_beta\leak_hudflashlight.cpp"
 		$File   "hl2_beta\leak_hudquickinfo.cpp"
+		$File   "hl2_beta\leak_hudsuitpower.cpp"
+		$File   "hl2_beta\leak_hudsuitpower.h"		
 		}
 		
 	}

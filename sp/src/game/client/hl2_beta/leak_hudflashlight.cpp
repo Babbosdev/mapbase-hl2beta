@@ -8,7 +8,7 @@
 #include "hud.h"
 #include "hudelement.h"
 #include "hud_numericdisplay.h"
-#include "hl2_retail/hud_suitpower.h"
+#include "hl2_beta/leak_hudsuitpower.h"
 #include "hud_macros.h"
 #include "parsemsg.h"
 #include "iclientmode.h"
