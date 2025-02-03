@@ -226,4 +226,3 @@ void CHud::DrawIconProgressBar(int x, int y, int w, int h, CHudTexture *icon, fl
 			clr);
 	}
 }
-

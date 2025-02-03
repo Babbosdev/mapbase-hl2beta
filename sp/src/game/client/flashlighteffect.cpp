@@ -16,7 +16,7 @@
 #include "toolframework_client.h"
 
 #ifdef HL2_CLIENT_DLL
-#include "hl2_retail\c_basehlplayer.h"
+#include "c_basehlplayer.h"
 #endif // HL2_CLIENT_DLL
 
 #if defined( _X360 )

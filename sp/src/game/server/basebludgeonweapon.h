@@ -8,7 +8,7 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#include "hl2_retail\basehlcombatweapon.h"
+#include "basehlcombatweapon.h"
 
 #ifndef BASEBLUDGEONWEAPON_H
 #define BASEBLUDGEONWEAPON_H

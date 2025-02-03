@@ -1,4 +1,4 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+ï»¿//========= Copyright Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -57,6 +57,12 @@ ConVar mp_fadetoblack(
 
 ConVar sv_hudhint_sound( "sv_hudhint_sound", "1", FCVAR_REPLICATED );
 
+// mapbase-hl2beta
+#ifdef HL2_CLIENT_DLL
+ConVar EnableRetailHud("retail_hud", "0", FCVAR_ARCHIVE, "Toggle between retail hud and beta (2003) hud");
+#endif
 
-ConVar weapons_2003leakbehaviour("beta_weapons_behaviour", "0", FCVAR_REPLICATED | FCVAR_ARCHIVE, "Make all weapons behave like the HALF-LIFE² Leak\n");
-ConVar weapons_2003leak_allowreloadsounds("beta_weapons_allowreloadsounds", "0", FCVAR_REPLICATED | FCVAR_ARCHIVE, "Allow reload sounds\n");
+#ifdef GAME_DLL
+ConVar weapons_2003leakbehaviour("beta_weapons_behaviour", "0", FCVAR_ARCHIVE, "Make all weapons behave like the HALF-LIFE 2 Leak\n");
+ConVar weapons_2003leak_allowreloadsounds("beta_weapons_allowreloadsounds", "0", FCVAR_ARCHIVE, "Allow reload sounds on the beta weapons\n");
+#endif

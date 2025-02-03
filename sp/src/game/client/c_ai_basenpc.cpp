@@ -9,7 +9,7 @@
 #include "engine/ivdebugoverlay.h"
 
 #if defined( HL2_DLL ) || defined( HL2_EPISODIC )
-#include "hl2_retail\c_basehlplayer.h"
+#include "c_basehlplayer.h"
 #endif
 
 #include "death_pose.h"

@@ -20,7 +20,7 @@
 
 // The base class of the scripted weapon is game-specific.
 #if defined(HL2_DLL) || defined(HL2_CLIENT_DLL)
-#include "hl2_retail\basehlcombatweapon_shared.h"
+#include "basehlcombatweapon_shared.h"
 #define SCRIPTED_WEAPON_DERIVED_FROM CBaseHLCombatWeapon
 #else
 #define SCRIPTED_WEAPON_DERIVED_FROM CBaseCombatWeapon

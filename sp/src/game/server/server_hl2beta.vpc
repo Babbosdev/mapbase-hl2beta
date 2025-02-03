@@ -1,0 +1,27 @@
+// SERVER SIDE HL2BETA VPC SCRIPT
+
+$Configuration
+{
+	$Compiler
+	{
+		$PreprocessorDefinitions		"$BASE;MAPBASE" [$MAPBASE]
+	}
+}
+
+$Project
+{
+	$Folder	"Source Files"
+	{
+
+		$Folder	"HL2 BETA DLL"
+		{
+		// Grenades
+	    $File	"hl2beta\leak_grenade_ar2.cpp"
+		$File	"hl2beta\leak_grenade_ar2.h"
+		// Weapons
+		$File	"hl2beta\leak_weapon_pistol.cpp"
+		$File	"hl2beta\leak_weapon_smg1.cpp"
+		}
+		
+	}
+}

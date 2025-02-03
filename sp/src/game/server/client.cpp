@@ -42,7 +42,7 @@
 #endif
 
 #ifdef HL2_DLL
-#include "hl2_retail\weapon_physcannon.h"
+#include "weapon_physcannon.h"
 #endif
 
 #ifdef MAPBASE

@@ -16,7 +16,7 @@
 #include "rumble_shared.h"
 
 #if defined(HL2_DLL) || defined(HL2_CLIENT_DLL)
-	#include "hl2_retail\hl_movedata.h"
+	#include "hl_movedata.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!

@@ -24,49 +24,49 @@
 // ###################################################################
 LINK_ENTITY_TO_CLASS(filter_base, CBaseFilter);
 
-BEGIN_DATADESC(CBaseFilter)
+BEGIN_DATADESC( CBaseFilter )
 
-DEFINE_KEYFIELD(m_bNegated, FIELD_BOOLEAN, "Negated"),
+	DEFINE_KEYFIELD(m_bNegated, FIELD_BOOLEAN, "Negated"),
 #ifdef MAPBASE
-DEFINE_KEYFIELD(m_bPassCallerWhenTested, FIELD_BOOLEAN, "PassCallerWhenTested"),
+	DEFINE_KEYFIELD(m_bPassCallerWhenTested, FIELD_BOOLEAN, "PassCallerWhenTested"),
 #endif
 
-// Inputs
-DEFINE_INPUTFUNC(FIELD_INPUT, "TestActivator", InputTestActivator),
+	// Inputs
+	DEFINE_INPUTFUNC( FIELD_INPUT, "TestActivator", InputTestActivator ),
 #ifdef MAPBASE
-DEFINE_INPUTFUNC(FIELD_EHANDLE, "TestEntity", InputTestEntity),
-DEFINE_INPUTFUNC(FIELD_INPUT, "SetField", InputSetField),
+	DEFINE_INPUTFUNC( FIELD_EHANDLE, "TestEntity", InputTestEntity ),
+	DEFINE_INPUTFUNC( FIELD_INPUT, "SetField", InputSetField ),
 #endif
 
-// Outputs
-DEFINE_OUTPUT(m_OnPass, "OnPass"),
-DEFINE_OUTPUT(m_OnFail, "OnFail"),
+	// Outputs
+	DEFINE_OUTPUT( m_OnPass, "OnPass"),
+	DEFINE_OUTPUT( m_OnFail, "OnFail"),
 
 END_DATADESC()
 
 #ifdef MAPBASE_VSCRIPT
-BEGIN_ENT_SCRIPTDESC(CBaseFilter, CBaseEntity, "All entities which could be used as filters.")
+BEGIN_ENT_SCRIPTDESC( CBaseFilter, CBaseEntity, "All entities which could be used as filters." )
 
-DEFINE_SCRIPTFUNC_NAMED(ScriptPassesFilter, "PassesFilter", "Check if the given caller and entity pass the filter. The caller is the one who requests the filter result; For example, the entity being damaged when using this as a damage filter.")
-DEFINE_SCRIPTFUNC_NAMED(ScriptPassesDamageFilter, "PassesDamageFilter", "Check if the given caller and damage info pass the damage filter, with the second parameter being a CTakeDamageInfo instance. The caller is the one who requests the filter result; For example, the entity being damaged when using this as a damage filter.")
-DEFINE_SCRIPTFUNC_NAMED(ScriptPassesFinalDamageFilter, "PassesFinalDamageFilter", "Used by filter_damage_redirect to distinguish between standalone filter calls and actually damaging an entity. Returns true if there's no unique behavior. Parameters are identical to PassesDamageFilter.")
-DEFINE_SCRIPTFUNC_NAMED(ScriptBloodAllowed, "BloodAllowed", "Check if the given caller and damage info allow for the production of blood.")
-DEFINE_SCRIPTFUNC_NAMED(ScriptDamageMod, "DamageMod", "Mods the damage info with the given caller.")
+	DEFINE_SCRIPTFUNC_NAMED( ScriptPassesFilter, "PassesFilter", "Check if the given caller and entity pass the filter. The caller is the one who requests the filter result; For example, the entity being damaged when using this as a damage filter." )
+	DEFINE_SCRIPTFUNC_NAMED( ScriptPassesDamageFilter, "PassesDamageFilter", "Check if the given caller and damage info pass the damage filter, with the second parameter being a CTakeDamageInfo instance. The caller is the one who requests the filter result; For example, the entity being damaged when using this as a damage filter." )
+	DEFINE_SCRIPTFUNC_NAMED( ScriptPassesFinalDamageFilter, "PassesFinalDamageFilter", "Used by filter_damage_redirect to distinguish between standalone filter calls and actually damaging an entity. Returns true if there's no unique behavior. Parameters are identical to PassesDamageFilter." )
+	DEFINE_SCRIPTFUNC_NAMED( ScriptBloodAllowed, "BloodAllowed", "Check if the given caller and damage info allow for the production of blood." )
+	DEFINE_SCRIPTFUNC_NAMED( ScriptDamageMod, "DamageMod", "Mods the damage info with the given caller." )
 
 END_SCRIPTDESC();
 #endif
 
 //-----------------------------------------------------------------------------
 
-bool CBaseFilter::PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+bool CBaseFilter::PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 {
 	return true;
 }
 
 
-bool CBaseFilter::PassesFilter(CBaseEntity *pCaller, CBaseEntity *pEntity)
+bool CBaseFilter::PassesFilter( CBaseEntity *pCaller, CBaseEntity *pEntity )
 {
-	bool baseResult = PassesFilterImpl(pCaller, pEntity);
+	bool baseResult = PassesFilterImpl( pCaller, pEntity );
 	return (m_bNegated) ? !baseResult : baseResult;
 }
 
@@ -92,14 +92,14 @@ bool CBaseFilter::PassesDamageFilter(const CTakeDamageInfo &info)
 
 
 #ifdef MAPBASE
-bool CBaseFilter::PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+bool CBaseFilter::PassesDamageFilterImpl( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 {
-	return PassesFilterImpl(pCaller, info.GetAttacker());
+	return PassesFilterImpl( pCaller, info.GetAttacker() );
 }
 #else
-bool CBaseFilter::PassesDamageFilterImpl(const CTakeDamageInfo &info)
+bool CBaseFilter::PassesDamageFilterImpl( const CTakeDamageInfo &info )
 {
-	return PassesFilterImpl(NULL, info.GetAttacker());
+	return PassesFilterImpl( NULL, info.GetAttacker() );
 }
 #endif
 
@@ -107,22 +107,22 @@ bool CBaseFilter::PassesDamageFilterImpl(const CTakeDamageInfo &info)
 // Purpose: Input handler for testing the activator. If the activator passes the
 //			filter test, the OnPass output is fired. If not, the OnFail output is fired.
 //-----------------------------------------------------------------------------
-void CBaseFilter::InputTestActivator(inputdata_t &inputdata)
+void CBaseFilter::InputTestActivator( inputdata_t &inputdata )
 {
-	if (PassesFilter(inputdata.pCaller, inputdata.pActivator))
+	if ( PassesFilter( inputdata.pCaller, inputdata.pActivator ) )
 	{
 #ifdef MAPBASE
-		m_OnPass.FireOutput(inputdata.pActivator, m_bPassCallerWhenTested ? inputdata.pCaller : this);
+		m_OnPass.FireOutput( inputdata.pActivator, m_bPassCallerWhenTested ? inputdata.pCaller : this );
 #else
-		m_OnPass.FireOutput(inputdata.pActivator, this);
+		m_OnPass.FireOutput( inputdata.pActivator, this );
 #endif
 	}
 	else
 	{
 #ifdef MAPBASE
-		m_OnFail.FireOutput(inputdata.pActivator, m_bPassCallerWhenTested ? inputdata.pCaller : this);
+		m_OnFail.FireOutput( inputdata.pActivator, m_bPassCallerWhenTested ? inputdata.pCaller : this );
 #else
-		m_OnFail.FireOutput(inputdata.pActivator, this);
+		m_OnFail.FireOutput( inputdata.pActivator, this );
 #endif
 	}
 }
@@ -132,28 +132,28 @@ void CBaseFilter::InputTestActivator(inputdata_t &inputdata)
 // Purpose: Input handler for testing the activator. If the activator passes the
 //			filter test, the OnPass output is fired. If not, the OnFail output is fired.
 //-----------------------------------------------------------------------------
-void CBaseFilter::InputTestEntity(inputdata_t &inputdata)
+void CBaseFilter::InputTestEntity( inputdata_t &inputdata )
 {
-	if (!inputdata.value.Entity())
+	if ( !inputdata.value.Entity() )
 	{
 		// HACKHACK: Not firing OnFail in this case is intentional for the time being (activator shouldn't be null)
 		return;
 	}
 
-	if (PassesFilter(inputdata.pCaller, inputdata.value.Entity()))
+	if ( PassesFilter( inputdata.pCaller, inputdata.value.Entity() ) )
 	{
-		m_OnPass.FireOutput(inputdata.value.Entity(), m_bPassCallerWhenTested ? inputdata.pCaller : this);
+		m_OnPass.FireOutput( inputdata.value.Entity(), m_bPassCallerWhenTested ? inputdata.pCaller : this );
 	}
 	else
 	{
-		m_OnFail.FireOutput(inputdata.value.Entity(), m_bPassCallerWhenTested ? inputdata.pCaller : this);
+		m_OnFail.FireOutput( inputdata.value.Entity(), m_bPassCallerWhenTested ? inputdata.pCaller : this );
 	}
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Tries to set the filter's target since most filters use "filtername" anyway
 //-----------------------------------------------------------------------------
-void CBaseFilter::InputSetField(inputdata_t& inputdata)
+void CBaseFilter::InputSetField( inputdata_t& inputdata )
 {
 	KeyValue("filtername", inputdata.value.String());
 	Activate();
@@ -161,11 +161,11 @@ void CBaseFilter::InputSetField(inputdata_t& inputdata)
 #endif
 
 #ifdef MAPBASE_VSCRIPT
-bool CBaseFilter::ScriptPassesFilter(HSCRIPT pCaller, HSCRIPT pEntity) { return PassesFilter(ToEnt(pCaller), ToEnt(pEntity)); }
-bool CBaseFilter::ScriptPassesDamageFilter(HSCRIPT pCaller, HSCRIPT pInfo) { return (pInfo) ? PassesDamageFilter(ToEnt(pCaller), *const_cast<const CTakeDamageInfo*>(HScriptToClass<CTakeDamageInfo>(pInfo))) : false; }
-bool CBaseFilter::ScriptPassesFinalDamageFilter(HSCRIPT pCaller, HSCRIPT pInfo) { return (pInfo) ? PassesFinalDamageFilter(ToEnt(pCaller), *const_cast<const CTakeDamageInfo*>(HScriptToClass<CTakeDamageInfo>(pInfo))) : false; }
-bool CBaseFilter::ScriptBloodAllowed(HSCRIPT pCaller, HSCRIPT pInfo) { return (pInfo) ? BloodAllowed(ToEnt(pCaller), *const_cast<const CTakeDamageInfo*>(HScriptToClass<CTakeDamageInfo>(pInfo))) : false; }
-bool CBaseFilter::ScriptDamageMod(HSCRIPT pCaller, HSCRIPT pInfo) { return (pInfo) ? DamageMod(ToEnt(pCaller), *HScriptToClass<CTakeDamageInfo>(pInfo)) : false; }
+bool CBaseFilter::ScriptPassesFilter( HSCRIPT pCaller, HSCRIPT pEntity ) { return PassesFilter( ToEnt(pCaller), ToEnt(pEntity) ); }
+bool CBaseFilter::ScriptPassesDamageFilter( HSCRIPT pCaller, HSCRIPT pInfo ) { return (pInfo) ? PassesDamageFilter( ToEnt( pCaller ), *const_cast<const CTakeDamageInfo*>(HScriptToClass<CTakeDamageInfo>( pInfo )) ) : false; }
+bool CBaseFilter::ScriptPassesFinalDamageFilter( HSCRIPT pCaller, HSCRIPT pInfo ) { return (pInfo) ? PassesFinalDamageFilter( ToEnt( pCaller ), *const_cast<const CTakeDamageInfo*>(HScriptToClass<CTakeDamageInfo>( pInfo )) ) : false; }
+bool CBaseFilter::ScriptBloodAllowed( HSCRIPT pCaller, HSCRIPT pInfo ) { return (pInfo) ? BloodAllowed( ToEnt( pCaller ), *const_cast<const CTakeDamageInfo*>(HScriptToClass<CTakeDamageInfo>( pInfo )) ) : false; }
+bool CBaseFilter::ScriptDamageMod( HSCRIPT pCaller, HSCRIPT pInfo ) { return (pInfo) ? DamageMod( ToEnt( pCaller ), *HScriptToClass<CTakeDamageInfo>( pInfo ) ) : false; }
 #endif
 
 
@@ -183,14 +183,14 @@ enum filter_t
 
 class CFilterMultiple : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterMultiple, CBaseFilter);
+	DECLARE_CLASS( CFilterMultiple, CBaseFilter );
 	DECLARE_DATADESC();
 
 	filter_t	m_nFilterType;
 	string_t	m_iFilterName[MAX_FILTERS];
 	EHANDLE		m_hFilter[MAX_FILTERS];
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity);
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity );
 #ifdef MAPBASE
 	bool PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info);
 #else
@@ -199,29 +199,29 @@ class CFilterMultiple : public CBaseFilter
 	void Activate(void);
 
 #ifdef MAPBASE
-	bool BloodAllowed(CBaseEntity *pCaller, const CTakeDamageInfo &info);
-	bool PassesFinalDamageFilter(CBaseEntity *pCaller, const CTakeDamageInfo &info);
-	bool DamageMod(CBaseEntity *pCaller, CTakeDamageInfo &info);
+	bool BloodAllowed( CBaseEntity *pCaller, const CTakeDamageInfo &info );
+	bool PassesFinalDamageFilter( CBaseEntity *pCaller, const CTakeDamageInfo &info );
+	bool DamageMod( CBaseEntity *pCaller, CTakeDamageInfo &info );
 #endif
 };
 
 LINK_ENTITY_TO_CLASS(filter_multi, CFilterMultiple);
 
-BEGIN_DATADESC(CFilterMultiple)
+BEGIN_DATADESC( CFilterMultiple )
 
 
-// Keys
-DEFINE_KEYFIELD(m_nFilterType, FIELD_INTEGER, "FilterType"),
+	// Keys
+	DEFINE_KEYFIELD(m_nFilterType, FIELD_INTEGER, "FilterType"),
 
-// Silence, Classcheck!
+	// Silence, Classcheck!
 //	DEFINE_ARRAY( m_iFilterName, FIELD_STRING, MAX_FILTERS ),
 
-DEFINE_KEYFIELD(m_iFilterName[0], FIELD_STRING, "Filter01"),
-DEFINE_KEYFIELD(m_iFilterName[1], FIELD_STRING, "Filter02"),
-DEFINE_KEYFIELD(m_iFilterName[2], FIELD_STRING, "Filter03"),
-DEFINE_KEYFIELD(m_iFilterName[3], FIELD_STRING, "Filter04"),
-DEFINE_KEYFIELD(m_iFilterName[4], FIELD_STRING, "Filter05"),
-DEFINE_ARRAY(m_hFilter, FIELD_EHANDLE, MAX_FILTERS),
+	DEFINE_KEYFIELD(m_iFilterName[0], FIELD_STRING, "Filter01"),
+	DEFINE_KEYFIELD(m_iFilterName[1], FIELD_STRING, "Filter02"),
+	DEFINE_KEYFIELD(m_iFilterName[2], FIELD_STRING, "Filter03"),
+	DEFINE_KEYFIELD(m_iFilterName[3], FIELD_STRING, "Filter04"),
+	DEFINE_KEYFIELD(m_iFilterName[4], FIELD_STRING, "Filter05"),
+	DEFINE_ARRAY( m_hFilter, FIELD_EHANDLE, MAX_FILTERS ),
 
 END_DATADESC()
 
@@ -230,27 +230,27 @@ END_DATADESC()
 //------------------------------------------------------------------------------
 // Purpose : Called after all entities have been loaded
 //------------------------------------------------------------------------------
-void CFilterMultiple::Activate(void)
+void CFilterMultiple::Activate( void )
 {
 	BaseClass::Activate();
-
+	
 	// We may reject an entity specified in the array of names, but we want the array of valid filters to be contiguous!
 	int nNextFilter = 0;
 
 	// Get handles to my filter entities
-	for (int i = 0; i < MAX_FILTERS; i++)
+	for ( int i = 0; i < MAX_FILTERS; i++ )
 	{
-		if (m_iFilterName[i] != NULL_STRING)
+		if ( m_iFilterName[i] != NULL_STRING )
 		{
-			CBaseEntity *pEntity = gEntList.FindEntityByName(NULL, m_iFilterName[i]);
+			CBaseEntity *pEntity = gEntList.FindEntityByName( NULL, m_iFilterName[i] );
 			CBaseFilter *pFilter = dynamic_cast<CBaseFilter *>(pEntity);
-			if (pFilter == NULL)
+			if ( pFilter == NULL )
 			{
-				Warning("filter_multi: Tried to add entity (%s) which is not a filter entity!\n", STRING(m_iFilterName[i]));
+				Warning("filter_multi: Tried to add entity (%s) which is not a filter entity!\n", STRING( m_iFilterName[i] ) );
 				continue;
 			}
 #ifdef MAPBASE
-			else if (pFilter == this)
+			else if ( pFilter == this )
 			{
 				Warning("filter_multi: Tried to add itself!\n");
 				continue;
@@ -269,17 +269,17 @@ void CFilterMultiple::Activate(void)
 // Purpose: Returns true if the entity passes our filter, false if not.
 // Input  : pEntity - Entity to test.
 //-----------------------------------------------------------------------------
-bool CFilterMultiple::PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+bool CFilterMultiple::PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 {
 	// Test against each filter
 	if (m_nFilterType == FILTER_AND)
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
 				CBaseFilter* pFilter = (CBaseFilter *)(m_hFilter[i].Get());
-				if (!pFilter->PassesFilter(pCaller, pEntity))
+				if (!pFilter->PassesFilter( pCaller, pEntity ) )
 				{
 					return false;
 				}
@@ -289,12 +289,12 @@ bool CFilterMultiple::PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntit
 	}
 	else  // m_nFilterType == FILTER_OR
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
 				CBaseFilter* pFilter = (CBaseFilter *)(m_hFilter[i].Get());
-				if (pFilter->PassesFilter(pCaller, pEntity))
+				if (pFilter->PassesFilter( pCaller, pEntity ) )
 				{
 					return true;
 				}
@@ -318,7 +318,7 @@ bool CFilterMultiple::PassesDamageFilterImpl(const CTakeDamageInfo &info)
 	// Test against each filter
 	if (m_nFilterType == FILTER_AND)
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
@@ -337,7 +337,7 @@ bool CFilterMultiple::PassesDamageFilterImpl(const CTakeDamageInfo &info)
 	}
 	else  // m_nFilterType == FILTER_OR
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
@@ -361,12 +361,12 @@ bool CFilterMultiple::PassesDamageFilterImpl(const CTakeDamageInfo &info)
 // Purpose: Returns true if blood should be allowed, false if not.
 // Input  : pEntity - Entity to test.
 //-----------------------------------------------------------------------------
-bool CFilterMultiple::BloodAllowed(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+bool CFilterMultiple::BloodAllowed( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 {
 	// Test against each filter
 	if (m_nFilterType == FILTER_AND)
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
@@ -381,7 +381,7 @@ bool CFilterMultiple::BloodAllowed(CBaseEntity *pCaller, const CTakeDamageInfo &
 	}
 	else  // m_nFilterType == FILTER_OR
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
@@ -400,12 +400,12 @@ bool CFilterMultiple::BloodAllowed(CBaseEntity *pCaller, const CTakeDamageInfo &
 // Purpose: Returns true if the entity passes our filter, false if not.
 // Input  : pEntity - Entity to test.
 //-----------------------------------------------------------------------------
-bool CFilterMultiple::PassesFinalDamageFilter(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+bool CFilterMultiple::PassesFinalDamageFilter( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 {
 	// Test against each filter
 	if (m_nFilterType == FILTER_AND)
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
@@ -420,7 +420,7 @@ bool CFilterMultiple::PassesFinalDamageFilter(CBaseEntity *pCaller, const CTakeD
 	}
 	else  // m_nFilterType == FILTER_OR
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
@@ -439,12 +439,12 @@ bool CFilterMultiple::PassesFinalDamageFilter(CBaseEntity *pCaller, const CTakeD
 // Purpose: Returns true if damage should be modded, false if not.
 // Input  : pEntity - Entity to test.
 //-----------------------------------------------------------------------------
-bool CFilterMultiple::DamageMod(CBaseEntity *pCaller, CTakeDamageInfo &info)
+bool CFilterMultiple::DamageMod( CBaseEntity *pCaller, CTakeDamageInfo &info )
 {
 	// Test against each filter
 	if (m_nFilterType == FILTER_AND)
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
@@ -459,7 +459,7 @@ bool CFilterMultiple::DamageMod(CBaseEntity *pCaller, CTakeDamageInfo &info)
 	}
 	else  // m_nFilterType == FILTER_OR
 	{
-		for (int i = 0; i<MAX_FILTERS; i++)
+		for (int i=0;i<MAX_FILTERS;i++)
 		{
 			if (m_hFilter[i] != NULL)
 			{
@@ -481,13 +481,13 @@ bool CFilterMultiple::DamageMod(CBaseEntity *pCaller, CTakeDamageInfo &info)
 // ###################################################################
 class CFilterName : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterName, CBaseFilter);
+	DECLARE_CLASS( CFilterName, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	string_t m_iFilterName;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		// special check for !player as GetEntityName for player won't return "!player" as a name
 		if (FStrEq(STRING(m_iFilterName), "!player"))
@@ -496,12 +496,12 @@ public:
 		}
 		else
 		{
-			return pEntity->NameMatches(STRING(m_iFilterName));
+			return pEntity->NameMatches( STRING(m_iFilterName) );
 		}
 	}
 
 #ifdef MAPBASE
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_iFilterName = inputdata.value.StringID();
@@ -509,12 +509,12 @@ public:
 #endif
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_name, CFilterName);
+LINK_ENTITY_TO_CLASS( filter_activator_name, CFilterName );
 
-BEGIN_DATADESC(CFilterName)
+BEGIN_DATADESC( CFilterName )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterName, FIELD_STRING, "filtername"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iFilterName,	FIELD_STRING,	"filtername" ),
 
 END_DATADESC()
 
@@ -525,19 +525,19 @@ END_DATADESC()
 // ###################################################################
 class CFilterClass : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterClass, CBaseFilter);
+	DECLARE_CLASS( CFilterClass, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	string_t m_iFilterClass;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
-		return pEntity->ClassMatches(STRING(m_iFilterClass));
+		return pEntity->ClassMatches( STRING(m_iFilterClass) );
 	}
 
 #ifdef MAPBASE
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_iFilterClass = inputdata.value.StringID();
@@ -545,12 +545,12 @@ public:
 #endif
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_class, CFilterClass);
+LINK_ENTITY_TO_CLASS( filter_activator_class, CFilterClass );
 
-BEGIN_DATADESC(CFilterClass)
+BEGIN_DATADESC( CFilterClass )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterClass, FIELD_STRING, "filterclass"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iFilterClass,	FIELD_STRING,	"filterclass" ),
 
 END_DATADESC()
 
@@ -560,19 +560,19 @@ END_DATADESC()
 // ###################################################################
 class FilterTeam : public CBaseFilter
 {
-	DECLARE_CLASS(FilterTeam, CBaseFilter);
+	DECLARE_CLASS( FilterTeam, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	int		m_iFilterTeam;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
-		return (pEntity->GetTeamNumber() == m_iFilterTeam);
+	 	return ( pEntity->GetTeamNumber() == m_iFilterTeam );
 	}
 
 #ifdef MAPBASE
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_INTEGER);
 		m_iFilterTeam = inputdata.value.Int();
@@ -580,12 +580,12 @@ public:
 #endif
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_team, FilterTeam);
+LINK_ENTITY_TO_CLASS( filter_activator_team, FilterTeam );
 
-BEGIN_DATADESC(FilterTeam)
+BEGIN_DATADESC( FilterTeam )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterTeam, FIELD_INTEGER, "filterteam"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iFilterTeam,	FIELD_INTEGER,	"filterteam" ),
 
 END_DATADESC()
 
@@ -595,22 +595,22 @@ END_DATADESC()
 // ###################################################################
 class CFilterMassGreater : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterMassGreater, CBaseFilter);
+	DECLARE_CLASS( CFilterMassGreater, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	float m_fFilterMass;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
-		if (pEntity->VPhysicsGetObject() == NULL)
+		if ( pEntity->VPhysicsGetObject() == NULL )
 			return false;
 
-		return (pEntity->VPhysicsGetObject()->GetMass() > m_fFilterMass);
+		return ( pEntity->VPhysicsGetObject()->GetMass() > m_fFilterMass );
 	}
 
 #ifdef MAPBASE
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_FLOAT);
 		m_fFilterMass = inputdata.value.Float();
@@ -618,12 +618,12 @@ public:
 #endif
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_mass_greater, CFilterMassGreater);
+LINK_ENTITY_TO_CLASS( filter_activator_mass_greater, CFilterMassGreater );
 
-BEGIN_DATADESC(CFilterMassGreater)
+BEGIN_DATADESC( CFilterMassGreater )
 
 // Keyfields
-DEFINE_KEYFIELD(m_fFilterMass, FIELD_FLOAT, "filtermass"),
+DEFINE_KEYFIELD( m_fFilterMass,	FIELD_FLOAT,	"filtermass" ),
 
 END_DATADESC()
 
@@ -633,15 +633,15 @@ END_DATADESC()
 // ###################################################################
 class FilterDamageType : public CBaseFilter
 {
-	DECLARE_CLASS(FilterDamageType, CBaseFilter);
+	DECLARE_CLASS( FilterDamageType, CBaseFilter );
 	DECLARE_DATADESC();
 
 protected:
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
-		ASSERT(false);
-		return true;
+		ASSERT( false );
+	 	return true;
 	}
 
 #ifdef MAPBASE
@@ -653,40 +653,40 @@ protected:
 #ifdef MAPBASE
 		switch (m_iFilterType)
 		{
-		case 1:		return (info.GetDamageType() & m_iDamageType) != 0;
-		case 2:
-		{
-			int iRecvDT = info.GetDamageType();
-			int iOurDT = m_iDamageType;
-			while (iRecvDT)
+			case 1:		return (info.GetDamageType() & m_iDamageType) != 0;
+			case 2:
 			{
-				if (iRecvDT & iOurDT)
-					return true;
+				int iRecvDT = info.GetDamageType();
+				int iOurDT = m_iDamageType;
+				while (iRecvDT)
+				{
+					if (iRecvDT & iOurDT)
+						return true;
 
-				iRecvDT >>= 1; iOurDT >>= 1;
-			}
-			return false;
-		} break;
+					iRecvDT >>= 1; iOurDT >>= 1;
+				}
+				return false;
+			} break;
 		}
 #endif
-		return info.GetDamageType() == m_iDamageType;
+	 	return info.GetDamageType() == m_iDamageType;
 	}
 
 #ifdef MAPBASE
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_INTEGER);
 		m_iDamageType = inputdata.value.Int();
 	}
 
-	bool KeyValue(const char *szKeyName, const char *szValue)
+	bool KeyValue( const char *szKeyName, const char *szValue )
 	{
-		if (FStrEq(szKeyName, "damageor") || FStrEq(szKeyName, "damagepresets"))
+		if (FStrEq( szKeyName, "damageor" ) || FStrEq( szKeyName, "damagepresets" ))
 		{
-			m_iDamageType |= atoi(szValue);
+			m_iDamageType |= atoi( szValue );
 		}
 		else
-			return BaseClass::KeyValue(szKeyName, szValue);
+			return BaseClass::KeyValue( szKeyName, szValue );
 
 		return true;
 	}
@@ -698,14 +698,14 @@ protected:
 #endif
 };
 
-LINK_ENTITY_TO_CLASS(filter_damage_type, FilterDamageType);
+LINK_ENTITY_TO_CLASS( filter_damage_type, FilterDamageType );
 
-BEGIN_DATADESC(FilterDamageType)
+BEGIN_DATADESC( FilterDamageType )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iDamageType, FIELD_INTEGER, "damagetype"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iDamageType,	FIELD_INTEGER,	"damagetype" ),
 #ifdef MAPBASE
-DEFINE_KEYFIELD(m_iFilterType, FIELD_INTEGER, "FilterType"),
+	DEFINE_KEYFIELD( m_iFilterType, FIELD_INTEGER, "FilterType" ),
 #endif
 
 END_DATADESC()
@@ -718,14 +718,14 @@ END_DATADESC()
 
 class CFilterEnemy : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterEnemy, CBaseFilter);
-	// NOT SAVED	
-	// m_iszPlayerName
+	DECLARE_CLASS( CFilterEnemy, CBaseFilter );
+		// NOT SAVED	
+		// m_iszPlayerName
 	DECLARE_DATADESC();
 
 public:
 
-	virtual bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity);
+	virtual bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity );
 #ifdef MAPBASE
 	virtual bool PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info);
 #else
@@ -733,7 +733,7 @@ public:
 #endif
 
 #ifdef MAPBASE
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_iszEnemyName = inputdata.value.StringID();
@@ -742,9 +742,9 @@ public:
 
 private:
 
-	bool	PassesNameFilter(CBaseEntity *pCaller);
-	bool	PassesProximityFilter(CBaseEntity *pCaller, CBaseEntity *pEnemy);
-	bool	PassesMobbedFilter(CBaseEntity *pCaller, CBaseEntity *pEnemy);
+	bool	PassesNameFilter( CBaseEntity *pCaller );
+	bool	PassesProximityFilter( CBaseEntity *pCaller, CBaseEntity *pEnemy );
+	bool	PassesMobbedFilter( CBaseEntity *pCaller, CBaseEntity *pEnemy );
 
 	string_t	m_iszEnemyName;				// Name or classname
 	float		m_flRadius;					// Radius (enemies are acquired at this range)
@@ -758,25 +758,25 @@ private:
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-bool CFilterEnemy::PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+bool CFilterEnemy::PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 {
-	if (pCaller == NULL || pEntity == NULL)
+	if ( pCaller == NULL || pEntity == NULL )
 		return false;
 
 	// If asked to, we'll never fail to pass an already acquired enemy
 	//	This allows us to use test criteria to initially pick an enemy, then disregard the test until a new enemy comes along
-	if (HasSpawnFlags(SF_FILTER_ENEMY_NO_LOSE_AQUIRED) && (pEntity == pCaller->GetEnemy()))
+	if ( HasSpawnFlags( SF_FILTER_ENEMY_NO_LOSE_AQUIRED ) && ( pEntity == pCaller->GetEnemy() ) )
 		return true;
 
 	// This is a little weird, but it's saying that if we're not the entity we're excluding the filter to, then just pass it throughZ
-	if (PassesNameFilter(pEntity) == false)
+	if ( PassesNameFilter( pEntity ) == false )
 		return true;
 
-	if (PassesProximityFilter(pCaller, pEntity) == false)
+	if ( PassesProximityFilter( pCaller, pEntity ) == false )
 		return false;
 
 	// NOTE: This can result in some weird NPC behavior if used improperly
-	if (PassesMobbedFilter(pCaller, pEntity) == false)
+	if ( PassesMobbedFilter( pCaller, pEntity ) == false )
 		return false;
 
 	// The filter has been passed, meaning:
@@ -790,13 +790,13 @@ bool CFilterEnemy::PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
 // Purpose: 
 //-----------------------------------------------------------------------------
 #ifdef MAPBASE
-bool CFilterEnemy::PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+bool CFilterEnemy::PassesDamageFilterImpl( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 #else
-bool CFilterEnemy::PassesDamageFilterImpl(const CTakeDamageInfo &info)
+bool CFilterEnemy::PassesDamageFilterImpl( const CTakeDamageInfo &info )
 #endif
 {
 	// NOTE: This function has no meaning to this implementation of the filter class!
-	Assert(0);
+	Assert( 0 );
 	return false;
 }
 
@@ -805,27 +805,27 @@ bool CFilterEnemy::PassesDamageFilterImpl(const CTakeDamageInfo &info)
 // Input  : *pEnemy - Entity being assessed
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CFilterEnemy::PassesNameFilter(CBaseEntity *pEnemy)
+bool CFilterEnemy::PassesNameFilter( CBaseEntity *pEnemy )
 {
 	// If there is no name specified, we're not using it
-	if (m_iszEnemyName == NULL_STRING)
+	if ( m_iszEnemyName	== NULL_STRING )
 		return true;
 
 #ifdef MAPBASE
-	if (m_iszEnemyName == gm_isz_name_player)
+	if ( m_iszEnemyName == gm_isz_name_player )
 #else
 	// Cache off the special case player name
-	if (m_iszPlayerName == NULL_STRING)
+	if ( m_iszPlayerName == NULL_STRING )
 	{
-		m_iszPlayerName = FindPooledString("!player");
+		m_iszPlayerName = FindPooledString( "!player" );
 	}
 
-	if (m_iszEnemyName == m_iszPlayerName)
+	if ( m_iszEnemyName == m_iszPlayerName )
 #endif
 	{
-		if (pEnemy->IsPlayer())
+		if ( pEnemy->IsPlayer() )
 		{
-			if (m_bNegated)
+			if ( m_bNegated )
 				return false;
 
 			return true;
@@ -834,22 +834,22 @@ bool CFilterEnemy::PassesNameFilter(CBaseEntity *pEnemy)
 
 	// May be either a targetname or classname
 #ifdef MAPBASE
-	bool bNameOrClassnameMatches = (pEnemy->NameMatches(STRING(m_iszEnemyName)) || pEnemy->ClassMatches(STRING(m_iszEnemyName)));
+	bool bNameOrClassnameMatches = ( pEnemy->NameMatches(STRING(m_iszEnemyName)) || pEnemy->ClassMatches(STRING(m_iszEnemyName)) );
 #else
-	bool bNameOrClassnameMatches = (m_iszEnemyName == pEnemy->GetEntityName() || m_iszEnemyName == pEnemy->m_iClassname);
+	bool bNameOrClassnameMatches = ( m_iszEnemyName == pEnemy->GetEntityName() || m_iszEnemyName == pEnemy->m_iClassname );
 #endif
 
 	// We only leave this code block in a state meaning we've "succeeded" in any context
-	if (m_bNegated)
+	if ( m_bNegated )
 	{
 		// We wanted the names to not match, but they did
-		if (bNameOrClassnameMatches)
+		if ( bNameOrClassnameMatches )
 			return false;
 	}
 	else
 	{
 		// We wanted them to be the same, but they weren't
-		if (bNameOrClassnameMatches == false)
+		if ( bNameOrClassnameMatches == false )
 			return false;
 	}
 
@@ -862,54 +862,54 @@ bool CFilterEnemy::PassesNameFilter(CBaseEntity *pEnemy)
 //			*pEnemy - Entity being assessed
 // Output : Returns true if potential enemy passes this filter stage
 //-----------------------------------------------------------------------------
-bool CFilterEnemy::PassesProximityFilter(CBaseEntity *pCaller, CBaseEntity *pEnemy)
+bool CFilterEnemy::PassesProximityFilter( CBaseEntity *pCaller, CBaseEntity *pEnemy )
 {
 	// If there is no radius specified, we're not testing it
-	if (m_flRadius <= 0.0f)
+	if ( m_flRadius <= 0.0f )
 		return true;
 
 	// We test the proximity differently when we've already picked up this enemy before
-	bool bAlreadyEnemy = (pCaller->GetEnemy() == pEnemy);
+	bool bAlreadyEnemy = ( pCaller->GetEnemy() == pEnemy );
 
 	// Get our squared length to the enemy from the caller
-	float flDistToEnemySqr = (pCaller->GetAbsOrigin() - pEnemy->GetAbsOrigin()).LengthSqr();
+	float flDistToEnemySqr = ( pCaller->GetAbsOrigin() - pEnemy->GetAbsOrigin() ).LengthSqr();
 
 	// Two radii are used to control oscillation between true/false cases
 	// The larger radius is either specified or defaulted to be double or half the size of the inner radius
 	float flLargerRadius = m_flOuterRadius;
-	if (flLargerRadius == 0)
+	if ( flLargerRadius == 0 )
 	{
-		flLargerRadius = (m_bNegated) ? (m_flRadius*0.5f) : (m_flRadius*2.0f);
+		flLargerRadius = ( m_bNegated ) ? (m_flRadius*0.5f) : (m_flRadius*2.0f);
 	}
 
 	float flSmallerRadius = m_flRadius;
-	if (flSmallerRadius > flLargerRadius)
+	if ( flSmallerRadius > flLargerRadius )
 	{
-		::V_swap(flLargerRadius, flSmallerRadius);
+		::V_swap( flLargerRadius, flSmallerRadius );
 	}
 
-	float flDist;
-	if (bAlreadyEnemy)
+	float flDist;	
+	if ( bAlreadyEnemy )
 	{
-		flDist = (m_bNegated) ? flSmallerRadius : flLargerRadius;
+		flDist = ( m_bNegated ) ? flSmallerRadius : flLargerRadius;
 	}
 	else
 	{
-		flDist = (m_bNegated) ? flLargerRadius : flSmallerRadius;
+		flDist = ( m_bNegated ) ? flLargerRadius : flSmallerRadius;
 	}
 
 	// Test for success
-	if (flDistToEnemySqr <= (flDist*flDist))
+	if ( flDistToEnemySqr <= (flDist*flDist) )
 	{
 		// We wanted to fail but didn't
-		if (m_bNegated)
+		if ( m_bNegated )
 			return false;
 
 		return true;
 	}
-
+	
 	// We wanted to succeed but didn't
-	if (m_bNegated == false)
+	if ( m_bNegated == false )
 		return false;
 
 	return true;
@@ -921,39 +921,39 @@ bool CFilterEnemy::PassesProximityFilter(CBaseEntity *pCaller, CBaseEntity *pEne
 //			*pEnemy - Entity being assessed
 // Output : Returns true if potential enemy passes this filter stage
 //-----------------------------------------------------------------------------
-bool CFilterEnemy::PassesMobbedFilter(CBaseEntity *pCaller, CBaseEntity *pEnemy)
+bool CFilterEnemy::PassesMobbedFilter( CBaseEntity *pCaller, CBaseEntity *pEnemy )
 {
 	// Must be a valid candidate
 	CAI_BaseNPC *pNPC = pCaller->MyNPCPointer();
-	if (pNPC == NULL || pNPC->GetSquad() == NULL)
+	if ( pNPC == NULL || pNPC->GetSquad() == NULL )
 		return true;
 
 	// Make sure we're checking for this
-	if (m_nMaxSquadmatesPerEnemy <= 0)
+	if ( m_nMaxSquadmatesPerEnemy <= 0 )
 		return true;
 
 	AISquadIter_t iter;
 	int nNumMatchingSquadmates = 0;
-
+	
 	// Look through our squad members to see how many of them are already mobbing this entity
-	for (CAI_BaseNPC *pSquadMember = pNPC->GetSquad()->GetFirstMember(&iter); pSquadMember != NULL; pSquadMember = pNPC->GetSquad()->GetNextMember(&iter))
+	for ( CAI_BaseNPC *pSquadMember = pNPC->GetSquad()->GetFirstMember( &iter ); pSquadMember != NULL; pSquadMember = pNPC->GetSquad()->GetNextMember( &iter ) )
 	{
 		// Disregard ourself
-		if (pSquadMember == pNPC)
+		if ( pSquadMember == pNPC )
 			continue;
 
 		// If the enemies match, count it
-		if (pSquadMember->GetEnemy() == pEnemy)
+		if ( pSquadMember->GetEnemy() == pEnemy )
 		{
 			nNumMatchingSquadmates++;
 
 			// If we're at or passed the max we stop
-			if (nNumMatchingSquadmates >= m_nMaxSquadmatesPerEnemy)
+			if ( nNumMatchingSquadmates >= m_nMaxSquadmatesPerEnemy )
 			{
 				// We wanted to find more than allowed and we did
-				if (m_bNegated)
+				if ( m_bNegated )
 					return true;
-
+				
 				// We wanted to be less but we're not
 				return false;
 			}
@@ -961,22 +961,22 @@ bool CFilterEnemy::PassesMobbedFilter(CBaseEntity *pCaller, CBaseEntity *pEnemy)
 	}
 
 	// We wanted to find more than the allowed amount but we didn't
-	if (m_bNegated)
+	if ( m_bNegated )
 		return false;
 
 	return true;
 }
 
-LINK_ENTITY_TO_CLASS(filter_enemy, CFilterEnemy);
+LINK_ENTITY_TO_CLASS( filter_enemy, CFilterEnemy );
 
-BEGIN_DATADESC(CFilterEnemy)
-
-DEFINE_KEYFIELD(m_iszEnemyName, FIELD_STRING, "filtername"),
-DEFINE_KEYFIELD(m_flRadius, FIELD_FLOAT, "filter_radius"),
-DEFINE_KEYFIELD(m_flOuterRadius, FIELD_FLOAT, "filter_outer_radius"),
-DEFINE_KEYFIELD(m_nMaxSquadmatesPerEnemy, FIELD_INTEGER, "filter_max_per_enemy"),
+BEGIN_DATADESC( CFilterEnemy )
+	
+	DEFINE_KEYFIELD( m_iszEnemyName, FIELD_STRING, "filtername" ),
+	DEFINE_KEYFIELD( m_flRadius, FIELD_FLOAT, "filter_radius" ),
+	DEFINE_KEYFIELD( m_flOuterRadius, FIELD_FLOAT, "filter_outer_radius" ),
+	DEFINE_KEYFIELD( m_nMaxSquadmatesPerEnemy, FIELD_INTEGER, "filter_max_per_enemy" ),
 #ifndef MAPBASE
-DEFINE_FIELD(m_iszPlayerName, FIELD_STRING),
+	DEFINE_FIELD( m_iszPlayerName, FIELD_STRING ),
 #endif
 
 END_DATADESC()
@@ -987,14 +987,14 @@ END_DATADESC()
 // ###################################################################
 class CFilterModel : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterModel, CBaseFilter);
+	DECLARE_CLASS( CFilterModel, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	string_t m_iFilterModel;
 	string_t m_strFilterSkin;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		if (!pEntity)
 			return false;
@@ -1009,31 +1009,31 @@ public:
 		return false;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_iFilterModel = inputdata.value.StringID();
 	}
 
-	bool KeyValue(const char *szKeyName, const char *szValue)
+	bool KeyValue( const char *szKeyName, const char *szValue )
 	{
-		if (FStrEq(szKeyName, "filtername"))
+		if (FStrEq( szKeyName, "filtername" ))
 		{
-			m_iFilterModel = AllocPooledString(szValue);
+			m_iFilterModel = AllocPooledString( szValue );
 			return true;
 		}
 		else
-			return BaseClass::KeyValue(szKeyName, szValue);
+			return BaseClass::KeyValue( szKeyName, szValue );
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_model, CFilterModel);
+LINK_ENTITY_TO_CLASS( filter_activator_model, CFilterModel );
 
-BEGIN_DATADESC(CFilterModel)
+BEGIN_DATADESC( CFilterModel )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterModel, FIELD_STRING, "filtermodel"),
-DEFINE_KEYFIELD(m_strFilterSkin, FIELD_STRING, "skin"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iFilterModel,	FIELD_STRING,	"filtermodel" ),
+	DEFINE_KEYFIELD( m_strFilterSkin,	FIELD_STRING,	"skin" ),
 
 END_DATADESC()
 
@@ -1042,13 +1042,13 @@ END_DATADESC()
 // ###################################################################
 class CFilterContext : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterContext, CBaseFilter);
+	DECLARE_CLASS( CFilterContext, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	bool m_bAny;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		bool passes = false;
 		ResponseContext_t curcontext;
@@ -1080,19 +1080,19 @@ public:
 		return passes;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		m_ResponseContexts.RemoveAll();
 		AddContext(inputdata.value.String());
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_context, CFilterContext);
+LINK_ENTITY_TO_CLASS( filter_activator_context, CFilterContext );
 
-BEGIN_DATADESC(CFilterContext)
+BEGIN_DATADESC( CFilterContext )
 
-// Keyfields
-DEFINE_KEYFIELD(m_bAny, FIELD_BOOLEAN, "any"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_bAny,	FIELD_BOOLEAN,	"any" ),
 
 END_DATADESC()
 
@@ -1101,14 +1101,14 @@ END_DATADESC()
 // ###################################################################
 class CFilterSquad : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterSquad, CBaseFilter);
+	DECLARE_CLASS( CFilterSquad, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	string_t m_iFilterName;
 	bool m_bAllowSilentSquadMembers;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		CAI_BaseNPC *pNPC = pEntity->MyNPCPointer();
 		if (pEntity && pNPC)
@@ -1129,20 +1129,20 @@ public:
 		return false;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_iFilterName = inputdata.value.StringID();
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_squad, CFilterSquad);
+LINK_ENTITY_TO_CLASS( filter_activator_squad, CFilterSquad );
 
-BEGIN_DATADESC(CFilterSquad)
+BEGIN_DATADESC( CFilterSquad )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterName, FIELD_STRING, "filtername"),
-DEFINE_KEYFIELD(m_bAllowSilentSquadMembers, FIELD_BOOLEAN, "allowsilentmembers"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iFilterName,	FIELD_STRING,	"filtername" ),
+	DEFINE_KEYFIELD( m_bAllowSilentSquadMembers,	FIELD_BOOLEAN,	"allowsilentmembers" ),
 
 END_DATADESC()
 
@@ -1151,14 +1151,14 @@ END_DATADESC()
 // ###################################################################
 class CFilterHintGroup : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterHintGroup, CBaseFilter);
+	DECLARE_CLASS( CFilterHintGroup, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	string_t m_iFilterName;
 	ThreeState_t m_fHintLimiting;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		if (!pEntity)
 			return false;
@@ -1186,20 +1186,20 @@ public:
 		return false;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_iFilterName = inputdata.value.StringID();
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_hintgroup, CFilterHintGroup);
+LINK_ENTITY_TO_CLASS( filter_activator_hintgroup, CFilterHintGroup );
 
-BEGIN_DATADESC(CFilterHintGroup)
+BEGIN_DATADESC( CFilterHintGroup )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterName, FIELD_STRING, "filtername"),
-DEFINE_KEYFIELD(m_fHintLimiting, FIELD_INTEGER, "hintlimiting"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iFilterName,	FIELD_STRING,	"filtername" ),
+	DEFINE_KEYFIELD( m_fHintLimiting,	FIELD_INTEGER,	"hintlimiting" ),
 
 END_DATADESC()
 
@@ -1210,34 +1210,34 @@ extern bool ReadUnregisteredKeyfields(CBaseEntity *pTarget, const char *szKeyNam
 // ###################################################################
 class CFilterKeyfield : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterKeyfield, CBaseFilter);
+	DECLARE_CLASS( CFilterKeyfield, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	string_t m_iFilterKey;
 	string_t m_iFilterValue;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		variant_t var;
 		bool found = (pEntity->ReadKeyField(STRING(m_iFilterKey), &var) || ReadUnregisteredKeyfields(pEntity, STRING(m_iFilterKey), &var));
 		return m_iFilterValue != NULL_STRING ? Matcher_Match(STRING(m_iFilterValue), var.String()) : found;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_iFilterKey = inputdata.value.StringID();
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_keyfield, CFilterKeyfield);
+LINK_ENTITY_TO_CLASS( filter_activator_keyfield, CFilterKeyfield );
 
-BEGIN_DATADESC(CFilterKeyfield)
+BEGIN_DATADESC( CFilterKeyfield )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterKey, FIELD_STRING, "keyname"),
-DEFINE_KEYFIELD(m_iFilterValue, FIELD_STRING, "value"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iFilterKey,	FIELD_STRING,	"keyname" ),
+	DEFINE_KEYFIELD( m_iFilterValue,	FIELD_STRING,	"value" ),
 
 END_DATADESC()
 
@@ -1246,7 +1246,7 @@ END_DATADESC()
 // ###################################################################
 class CFilterRelationship : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterKeyfield, CBaseFilter);
+	DECLARE_CLASS( CFilterKeyfield, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
@@ -1276,7 +1276,7 @@ public:
 		return passes;
 	}
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		CBaseEntity *pSubject = NULL;
 		if (m_target != NULL_STRING)
@@ -1310,23 +1310,23 @@ public:
 		return passes;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_target = inputdata.value.StringID();
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_relationship, CFilterRelationship);
+LINK_ENTITY_TO_CLASS( filter_activator_relationship, CFilterRelationship );
 
-BEGIN_DATADESC(CFilterRelationship)
+BEGIN_DATADESC( CFilterRelationship )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iDisposition, FIELD_INTEGER, "disposition"),
-DEFINE_KEYFIELD(m_iszPriority, FIELD_STRING, "rank"),
-DEFINE_KEYFIELD(m_bInvertTarget, FIELD_BOOLEAN, "inverttarget"),
-DEFINE_KEYFIELD(m_bReciprocal, FIELD_BOOLEAN, "Reciprocal"),
-DEFINE_FIELD(m_hTarget, FIELD_EHANDLE),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iDisposition,	FIELD_INTEGER,	"disposition" ),
+	DEFINE_KEYFIELD( m_iszPriority,		FIELD_STRING,	"rank" ),
+	DEFINE_KEYFIELD( m_bInvertTarget,	FIELD_BOOLEAN,	"inverttarget" ),
+	DEFINE_KEYFIELD( m_bReciprocal,		FIELD_BOOLEAN,	"Reciprocal" ),
+	DEFINE_FIELD( m_hTarget,			FIELD_EHANDLE ),
 
 END_DATADESC()
 
@@ -1335,30 +1335,30 @@ END_DATADESC()
 // ###################################################################
 class CFilterClassify : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterClassify, CBaseFilter);
+	DECLARE_CLASS( CFilterClassify, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	Class_T m_iFilterClassify;
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		return pEntity->Classify() == m_iFilterClassify;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_INTEGER);
 		m_iFilterClassify = (Class_T)inputdata.value.Int();
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_classify, CFilterClassify);
+LINK_ENTITY_TO_CLASS( filter_activator_classify, CFilterClassify );
 
-BEGIN_DATADESC(CFilterClassify)
+BEGIN_DATADESC( CFilterClassify )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterClassify, FIELD_INTEGER, "filterclassify"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iFilterClassify,	FIELD_INTEGER,	"filterclassify" ),
 
 END_DATADESC()
 
@@ -1367,28 +1367,28 @@ END_DATADESC()
 // ###################################################################
 class CFilterCriteria : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterCriteria, CBaseFilter);
+	DECLARE_CLASS( CFilterCriteria, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
 	bool m_bAny;
 	bool m_bFull; // All criteria functions are gathered
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		if (!pEntity)
 			return false;
 
 		AI_CriteriaSet set;
-		pEntity->ModifyOrAppendCriteria(set);
+		pEntity->ModifyOrAppendCriteria( set );
 		if (m_bFull)
 		{
 			// Meeets the full wrath of the response criteria
 			CBasePlayer *pPlayer = UTIL_GetLocalPlayer();
-			if (pPlayer)
-				pPlayer->ModifyOrAppendPlayerCriteria(set);
+			if( pPlayer )
+				pPlayer->ModifyOrAppendPlayerCriteria( set );
 
-			pEntity->ReAppendContextCriteria(set);
+			pEntity->ReAppendContextCriteria( set );
 		}
 
 		bool passes = false;
@@ -1426,24 +1426,24 @@ public:
 		return passes;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		m_ResponseContexts.RemoveAll();
 		AddContext(inputdata.value.String());
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_criteria, CFilterCriteria);
+LINK_ENTITY_TO_CLASS( filter_activator_criteria, CFilterCriteria );
 
-BEGIN_DATADESC(CFilterCriteria)
+BEGIN_DATADESC( CFilterCriteria )
 
-// Keyfields
-DEFINE_KEYFIELD(m_bAny, FIELD_BOOLEAN, "any"),
-DEFINE_KEYFIELD(m_bFull, FIELD_BOOLEAN, "full"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_bAny,	FIELD_BOOLEAN,	"any" ),
+	DEFINE_KEYFIELD( m_bFull,	FIELD_BOOLEAN,	"full" ),
 
 END_DATADESC()
 
-extern bool TestEntityTriggerIntersection_Accurate(CBaseEntity *pTrigger, CBaseEntity *pEntity);
+extern bool TestEntityTriggerIntersection_Accurate( CBaseEntity *pTrigger, CBaseEntity *pEntity );
 
 // ###################################################################
 //	> CFilterInVolume
@@ -1451,7 +1451,7 @@ extern bool TestEntityTriggerIntersection_Accurate(CBaseEntity *pTrigger, CBaseE
 // ###################################################################
 class CFilterInVolume : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterInVolume, CBaseFilter);
+	DECLARE_CLASS( CFilterInVolume, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
@@ -1466,7 +1466,7 @@ public:
 			m_iszVolumeTester = AllocPooledString("!activator");
 	}
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		CBaseEntity *pVolume = gEntList.FindEntityByNameNearest(STRING(m_target), pEntity->GetLocalOrigin(), 0, this, pEntity, pCaller);
 		if (!pVolume)
@@ -1485,19 +1485,19 @@ public:
 		}
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_iszVolumeTester = inputdata.value.StringID();
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_involume, CFilterInVolume);
+LINK_ENTITY_TO_CLASS( filter_activator_involume, CFilterInVolume );
 
-BEGIN_DATADESC(CFilterInVolume)
+BEGIN_DATADESC( CFilterInVolume )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iszVolumeTester, FIELD_STRING, "tester"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iszVolumeTester,	FIELD_STRING,	"tester" ),
 
 END_DATADESC()
 
@@ -1506,7 +1506,7 @@ END_DATADESC()
 // ###################################################################
 class CFilterSurfaceData : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterSurfaceData, CBaseFilter);
+	DECLARE_CLASS( CFilterSurfaceData, CBaseFilter );
 	DECLARE_DATADESC();
 
 public:
@@ -1528,14 +1528,14 @@ public:
 
 		switch (m_iSurfaceType)
 		{
-		case SURFACETYPE_GAMEMATERIAL:
-		{
-			const surfacedata_t *pSurfaceData = physprops->GetSurfaceData(m_iSurfaceIndex);
-			if (pSurfaceData)
-				m_iSurfaceIndex = pSurfaceData->game.material;
-			else
-				Warning("Can't get surface data for %s\n", STRING(m_iFilterSurface));
-		} break;
+			case SURFACETYPE_GAMEMATERIAL:
+			{
+				const surfacedata_t *pSurfaceData = physprops->GetSurfaceData(m_iSurfaceIndex);
+				if (pSurfaceData)
+					m_iSurfaceIndex = pSurfaceData->game.material;
+				else
+					Warning("Can't get surface data for %s\n", STRING(m_iFilterSurface));
+			} break;
 		}
 	}
 
@@ -1545,28 +1545,28 @@ public:
 		ParseSurfaceIndex();
 	}
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		if (pEntity->VPhysicsGetObject())
 		{
 			int iMatIndex = pEntity->VPhysicsGetObject()->GetMaterialIndex();
 			switch (m_iSurfaceType)
 			{
-			case SURFACETYPE_GAMEMATERIAL:
-			{
-				const surfacedata_t *pSurfaceData = physprops->GetSurfaceData(iMatIndex);
-				if (pSurfaceData)
-					return m_iSurfaceIndex == pSurfaceData->game.material;
-			}
-			default:
-				return iMatIndex == m_iSurfaceIndex;
+				case SURFACETYPE_GAMEMATERIAL:
+				{
+					const surfacedata_t *pSurfaceData = physprops->GetSurfaceData(iMatIndex);
+					if (pSurfaceData)
+						return m_iSurfaceIndex == pSurfaceData->game.material;
+				}
+				default:
+					return iMatIndex == m_iSurfaceIndex;
 			}
 		}
 
 		return false;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		m_iFilterSurface = inputdata.value.StringID();
@@ -1574,13 +1574,13 @@ public:
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_activator_surfacedata, CFilterSurfaceData);
+LINK_ENTITY_TO_CLASS( filter_activator_surfacedata, CFilterSurfaceData );
 
-BEGIN_DATADESC(CFilterSurfaceData)
+BEGIN_DATADESC( CFilterSurfaceData )
 
-// Keyfields
-DEFINE_KEYFIELD(m_iFilterSurface, FIELD_STRING, "filterstring"),
-DEFINE_KEYFIELD(m_iSurfaceType, FIELD_INTEGER, "SurfaceType"),
+	// Keyfields
+	DEFINE_KEYFIELD( m_iFilterSurface,	FIELD_STRING,	"filterstring" ),
+	DEFINE_KEYFIELD( m_iSurfaceType, FIELD_INTEGER, "SurfaceType" ),
 
 END_DATADESC()
 
@@ -1591,7 +1591,7 @@ END_DATADESC()
 // ===================================================================
 class CBaseFilterRedirect : public CBaseFilter
 {
-	DECLARE_CLASS(CBaseFilterRedirect, CBaseFilter);
+	DECLARE_CLASS( CBaseFilterRedirect, CBaseFilter );
 
 public:
 	inline CBaseEntity *GetTargetFilter()
@@ -1601,7 +1601,7 @@ public:
 		return m_hDamageFilter.Get();
 	}
 
-	bool RedirectToFilter(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool RedirectToFilter( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		if (GetTargetFilter() && pEntity)
 		{
@@ -1612,7 +1612,7 @@ public:
 		return pEntity != NULL;
 	}
 
-	bool RedirectToDamageFilter(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool RedirectToDamageFilter( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
 		if (GetTargetFilter())
 		{
@@ -1623,17 +1623,17 @@ public:
 		return true;
 	}
 
-	virtual bool PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	virtual bool PassesDamageFilterImpl( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
-		return RedirectToDamageFilter(pCaller, info);
+		return RedirectToDamageFilter( pCaller, info );
 	}
 
-	virtual bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	virtual bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
-		return RedirectToFilter(pCaller, pEntity);
+		return RedirectToFilter( pCaller, pEntity );
 	}
 
-	virtual bool BloodAllowed(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	virtual bool BloodAllowed( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
 		if (GetTargetFilter())
 		{
@@ -1644,18 +1644,18 @@ public:
 		return true;
 	}
 
-	virtual bool DamageMod(CBaseEntity *pCaller, CTakeDamageInfo &info)
+	virtual bool DamageMod( CBaseEntity *pCaller, CTakeDamageInfo &info )
 	{
 		if (GetTargetFilter())
 		{
 			CBaseFilter *pFilter = static_cast<CBaseFilter*>(GetTargetFilter());
-			return pFilter->DamageMod(pCaller, info);
+			return pFilter->DamageMod( pCaller, info );
 		}
 
 		return true;
 	}
 
-	void InputSetField(inputdata_t& inputdata)
+	void InputSetField( inputdata_t& inputdata )
 	{
 		inputdata.value.Convert(FIELD_STRING);
 		InputSetDamageFilter(inputdata);
@@ -1675,16 +1675,16 @@ public:
 // ###################################################################
 class CFilterRedirectInflictor : public CBaseFilterRedirect
 {
-	DECLARE_CLASS(CFilterRedirectInflictor, CBaseFilterRedirect);
+	DECLARE_CLASS( CFilterRedirectInflictor, CBaseFilterRedirect );
 
 public:
-	bool PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool PassesDamageFilterImpl( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
 		return RedirectToFilter(pCaller, info.GetInflictor());
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_redirect_inflictor, CFilterRedirectInflictor);
+LINK_ENTITY_TO_CLASS( filter_redirect_inflictor, CFilterRedirectInflictor );
 
 // ###################################################################
 //	> CFilterRedirectWeapon
@@ -1693,32 +1693,32 @@ LINK_ENTITY_TO_CLASS(filter_redirect_inflictor, CFilterRedirectInflictor);
 // ###################################################################
 class CFilterRedirectWeapon : public CBaseFilterRedirect
 {
-	DECLARE_CLASS(CFilterRedirectWeapon, CBaseFilterRedirect);
+	DECLARE_CLASS( CFilterRedirectWeapon, CBaseFilterRedirect );
 
 public:
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		CBaseCombatCharacter *pBCC = pEntity->MyCombatCharacterPointer();
 		if (pBCC && pBCC->GetActiveWeapon())
 		{
-			return RedirectToFilter(pCaller, pBCC->GetActiveWeapon());
+			return RedirectToFilter( pCaller, pBCC->GetActiveWeapon() );
 		}
 
 		return false;
 	}
 
-	bool PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool PassesDamageFilterImpl( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
 		// Pass any weapon found in the damage info
 		if (info.GetWeapon())
 		{
-			return RedirectToFilter(pCaller, info.GetWeapon());
+			return RedirectToFilter( pCaller, info.GetWeapon() );
 		}
 
 		// Check the attacker's active weapon instead
 		if (info.GetAttacker())
 		{
-			return PassesFilterImpl(pCaller, info.GetAttacker());
+			return PassesFilterImpl( pCaller, info.GetAttacker() );
 		}
 
 		// No weapon to check
@@ -1726,7 +1726,7 @@ public:
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_redirect_weapon, CFilterRedirectWeapon);
+LINK_ENTITY_TO_CLASS( filter_redirect_weapon, CFilterRedirectWeapon );
 
 // ###################################################################
 //	> CFilterRedirectOwner
@@ -1734,10 +1734,10 @@ LINK_ENTITY_TO_CLASS(filter_redirect_weapon, CFilterRedirectWeapon);
 // ###################################################################
 class CFilterRedirectOwner : public CBaseFilterRedirect
 {
-	DECLARE_CLASS(CFilterRedirectOwner, CBaseFilterRedirect);
+	DECLARE_CLASS( CFilterRedirectOwner, CBaseFilterRedirect );
 
 public:
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		if (pEntity->GetOwnerEntity())
 		{
@@ -1748,7 +1748,7 @@ public:
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_redirect_owner, CFilterRedirectOwner);
+LINK_ENTITY_TO_CLASS( filter_redirect_owner, CFilterRedirectOwner );
 
 // ###################################################################
 //	> CFilterDamageTransfer
@@ -1756,7 +1756,7 @@ LINK_ENTITY_TO_CLASS(filter_redirect_owner, CFilterRedirectOwner);
 // ###################################################################
 class CFilterDamageTransfer : public CBaseFilterRedirect
 {
-	DECLARE_CLASS(CFilterDamageTransfer, CBaseFilterRedirect);
+	DECLARE_CLASS( CFilterDamageTransfer, CBaseFilterRedirect );
 	DECLARE_DATADESC();
 
 public:
@@ -1778,12 +1778,12 @@ public:
 	/*
 	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
-	return true;
+		return true;
 	}
 	*/
 
 	// A hack because of the way final damage filtering now works.
-	bool BloodAllowed(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool BloodAllowed( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
 		if (!m_bCallerDamageAllowed)
 			return false;
@@ -1794,7 +1794,7 @@ public:
 	// PassesFinalDamageFilter() was created for the express purpose of having filter_damage_transfer function without
 	// passing damage on filter checks that don't actually lead to us taking damage in the first place.
 	// PassesFinalDamageFilter() is only called in certain base entity functions where we DEFINITELY will take damage otherwise.
-	bool PassesFinalDamageFilter(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool PassesFinalDamageFilter( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
 		if (m_iSecondaryFilterMode == REDIRECT_MUST_PASS_TO_ACT)
 		{
@@ -1848,8 +1848,8 @@ public:
 	/*
 	void InputSetTarget( inputdata_t& inputdata )
 	{
-	m_target = inputdata.value.StringID();
-	m_hTarget = NULL;
+		m_target = inputdata.value.StringID();
+		m_hTarget = NULL;
 	}
 	*/
 
@@ -1871,15 +1871,15 @@ public:
 	int m_iMaxEntities = MAX_EDICTS;
 };
 
-LINK_ENTITY_TO_CLASS(filter_damage_transfer, CFilterDamageTransfer);
+LINK_ENTITY_TO_CLASS( filter_damage_transfer, CFilterDamageTransfer );
 
-BEGIN_DATADESC(CFilterDamageTransfer)
+BEGIN_DATADESC( CFilterDamageTransfer )
 
-//DEFINE_FIELD( m_hTarget,	FIELD_EHANDLE ),
-DEFINE_KEYFIELD(m_bAdjustDamagePosition, FIELD_BOOLEAN, "AdjustDamagePosition"),
-DEFINE_KEYFIELD(m_iMaxEntities, FIELD_INTEGER, "MaxEntities"),
-DEFINE_KEYFIELD(m_iSecondaryFilterMode, FIELD_INTEGER, "SecondaryFilterMode"),
-DEFINE_KEYFIELD(m_bCallerDamageAllowed, FIELD_BOOLEAN, "CallerDamageAllowed"),
+	//DEFINE_FIELD( m_hTarget,	FIELD_EHANDLE ),
+	DEFINE_KEYFIELD( m_bAdjustDamagePosition,	FIELD_BOOLEAN, "AdjustDamagePosition" ),
+	DEFINE_KEYFIELD( m_iMaxEntities,			FIELD_INTEGER, "MaxEntities" ),
+	DEFINE_KEYFIELD( m_iSecondaryFilterMode,	FIELD_INTEGER, "SecondaryFilterMode" ),
+	DEFINE_KEYFIELD( m_bCallerDamageAllowed,	FIELD_BOOLEAN, "CallerDamageAllowed" ),
 
 END_DATADESC()
 
@@ -1889,10 +1889,10 @@ END_DATADESC()
 // ###################################################################
 class CFilterBloodControl : public CBaseFilterRedirect
 {
-	DECLARE_CLASS(CFilterBloodControl, CBaseFilterRedirect);
+	DECLARE_CLASS( CFilterBloodControl, CBaseFilterRedirect );
 	DECLARE_DATADESC();
 public:
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		if (GetTargetFilter() && m_bSecondaryFilterIsDamageFilter)
 			return RedirectToFilter(pCaller, pEntity);
@@ -1900,7 +1900,7 @@ public:
 		return true;
 	}
 
-	bool BloodAllowed(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool BloodAllowed( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
 		if (m_bBloodDisabled)
 			return false;
@@ -1908,8 +1908,8 @@ public:
 		return GetTargetFilter() ? RedirectToDamageFilter(pCaller, info) : true;
 	}
 
-	void InputDisableBlood(inputdata_t &inputdata) { m_bBloodDisabled = true; }
-	void InputEnableBlood(inputdata_t &inputdata) { m_bBloodDisabled = false; }
+	void InputDisableBlood( inputdata_t &inputdata ) { m_bBloodDisabled = true; }
+	void InputEnableBlood( inputdata_t &inputdata ) { m_bBloodDisabled = false; }
 
 	bool m_bBloodDisabled;
 
@@ -1917,15 +1917,15 @@ public:
 	bool m_bSecondaryFilterIsDamageFilter;
 };
 
-LINK_ENTITY_TO_CLASS(filter_blood_control, CFilterBloodControl);
+LINK_ENTITY_TO_CLASS( filter_blood_control, CFilterBloodControl );
 
-BEGIN_DATADESC(CFilterBloodControl)
+BEGIN_DATADESC( CFilterBloodControl )
 
-DEFINE_KEYFIELD(m_bBloodDisabled, FIELD_BOOLEAN, "BloodDisabled"),
-DEFINE_KEYFIELD(m_bSecondaryFilterIsDamageFilter, FIELD_BOOLEAN, "SecondaryFilterMode"),
+	DEFINE_KEYFIELD( m_bBloodDisabled,	FIELD_BOOLEAN, "BloodDisabled" ),
+	DEFINE_KEYFIELD( m_bSecondaryFilterIsDamageFilter,	FIELD_BOOLEAN, "SecondaryFilterMode" ),
 
-DEFINE_INPUTFUNC(FIELD_VOID, "DisableBlood", InputDisableBlood),
-DEFINE_INPUTFUNC(FIELD_VOID, "EnableBlood", InputEnableBlood),
+	DEFINE_INPUTFUNC( FIELD_VOID, "DisableBlood", InputDisableBlood ),
+	DEFINE_INPUTFUNC( FIELD_VOID, "EnableBlood", InputEnableBlood ),
 
 END_DATADESC()
 
@@ -1935,10 +1935,10 @@ END_DATADESC()
 // ###################################################################
 class CFilterDamageMod : public CBaseFilterRedirect
 {
-	DECLARE_CLASS(CFilterDamageMod, CBaseFilterRedirect);
+	DECLARE_CLASS( CFilterDamageMod, CBaseFilterRedirect );
 	DECLARE_DATADESC();
 public:
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		if (GetTargetFilter() && m_iSecondaryFilterMode == REDIRECT_MUST_PASS_TO_DAMAGE_CALLER)
 			return RedirectToFilter(pCaller, pEntity);
@@ -1946,15 +1946,15 @@ public:
 		return true;
 	}
 
-	bool PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool PassesDamageFilterImpl( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
 		if (GetTargetFilter() && m_iSecondaryFilterMode == REDIRECT_MUST_PASS_TO_DAMAGE_CALLER)
-			return RedirectToDamageFilter(pCaller, info);
+			return RedirectToDamageFilter( pCaller, info );
 
 		return true;
 	}
 
-	bool DamageMod(CBaseEntity *pCaller, CTakeDamageInfo &info)
+	bool DamageMod( CBaseEntity *pCaller, CTakeDamageInfo &info )
 	{
 		if (GetTargetFilter())
 		{
@@ -1962,10 +1962,10 @@ public:
 
 			switch (m_iSecondaryFilterMode)
 			{
-			case REDIRECT_MUST_PASS_TO_DAMAGE_CALLER:
-			case REDIRECT_MUST_PASS_TO_ACT:				bPass = (RedirectToDamageFilter(pCaller, info)); break;
+				case REDIRECT_MUST_PASS_TO_DAMAGE_CALLER:
+				case REDIRECT_MUST_PASS_TO_ACT:				bPass = (RedirectToDamageFilter( pCaller, info )); break;
 
-			case REDIRECT_MUST_PASS_ACTIVATORS:			bPass = (info.GetAttacker() && RedirectToFilter(pCaller, info.GetAttacker())); break;
+				case REDIRECT_MUST_PASS_ACTIVATORS:			bPass = (info.GetAttacker() && RedirectToFilter(pCaller, info.GetAttacker())); break;
 			}
 
 			if (!bPass)
@@ -2004,11 +2004,11 @@ public:
 		return true;
 	}
 
-	void InputSetNewAttacker(inputdata_t &inputdata) { m_iszNewAttacker = inputdata.value.StringID(); m_hNewAttacker = NULL; }
-	void InputSetNewInflictor(inputdata_t &inputdata) { m_iszNewInflictor = inputdata.value.StringID(); m_hNewInflictor = NULL; }
-	void InputSetNewWeapon(inputdata_t &inputdata) { m_iszNewWeapon = inputdata.value.StringID(); m_hNewWeapon = NULL; }
+	void InputSetNewAttacker( inputdata_t &inputdata ) { m_iszNewAttacker = inputdata.value.StringID(); m_hNewAttacker = NULL; }
+	void InputSetNewInflictor( inputdata_t &inputdata ) { m_iszNewInflictor = inputdata.value.StringID(); m_hNewInflictor = NULL; }
+	void InputSetNewWeapon( inputdata_t &inputdata ) { m_iszNewWeapon = inputdata.value.StringID(); m_hNewWeapon = NULL; }
 
-	float m_flDamageMultiplier = 1.0f;
+	float m_flDamageMultiplier	= 1.0f;
 	float m_flDamageAddend;
 	int m_iDamageBitsAdded;
 	int m_iDamageBitsRemoved;
@@ -2021,27 +2021,27 @@ public:
 	int m_iSecondaryFilterMode;
 };
 
-LINK_ENTITY_TO_CLASS(filter_damage_mod, CFilterDamageMod);
+LINK_ENTITY_TO_CLASS( filter_damage_mod, CFilterDamageMod );
 
-BEGIN_DATADESC(CFilterDamageMod)
+BEGIN_DATADESC( CFilterDamageMod )
 
-DEFINE_KEYFIELD(m_iszNewAttacker, FIELD_STRING, "NewAttacker"),
-DEFINE_KEYFIELD(m_iszNewInflictor, FIELD_STRING, "NewInflictor"),
-DEFINE_KEYFIELD(m_iszNewWeapon, FIELD_STRING, "NewWeapon"),
-DEFINE_FIELD(m_hNewAttacker, FIELD_EHANDLE),
-DEFINE_FIELD(m_hNewInflictor, FIELD_EHANDLE),
-DEFINE_FIELD(m_hNewWeapon, FIELD_EHANDLE),
+	DEFINE_KEYFIELD( m_iszNewAttacker, FIELD_STRING, "NewAttacker" ),
+	DEFINE_KEYFIELD( m_iszNewInflictor, FIELD_STRING, "NewInflictor" ),
+	DEFINE_KEYFIELD( m_iszNewWeapon, FIELD_STRING, "NewWeapon" ),
+	DEFINE_FIELD( m_hNewAttacker, FIELD_EHANDLE ),
+	DEFINE_FIELD( m_hNewInflictor, FIELD_EHANDLE ),
+	DEFINE_FIELD( m_hNewWeapon, FIELD_EHANDLE ),
 
-DEFINE_INPUT(m_flDamageMultiplier, FIELD_FLOAT, "SetDamageMultiplier"),
-DEFINE_INPUT(m_flDamageAddend, FIELD_FLOAT, "SetDamageAddend"),
-DEFINE_INPUT(m_iDamageBitsAdded, FIELD_INTEGER, "SetDamageBitsAdded"),
-DEFINE_INPUT(m_iDamageBitsRemoved, FIELD_INTEGER, "SetDamageBitsRemoved"),
+	DEFINE_INPUT( m_flDamageMultiplier,	FIELD_FLOAT, "SetDamageMultiplier" ),
+	DEFINE_INPUT( m_flDamageAddend,		FIELD_FLOAT, "SetDamageAddend" ),
+	DEFINE_INPUT( m_iDamageBitsAdded,	FIELD_INTEGER, "SetDamageBitsAdded" ),
+	DEFINE_INPUT( m_iDamageBitsRemoved,	FIELD_INTEGER, "SetDamageBitsRemoved" ),
 
-DEFINE_KEYFIELD(m_iSecondaryFilterMode, FIELD_INTEGER, "SecondaryFilterMode"),
+	DEFINE_KEYFIELD( m_iSecondaryFilterMode,	FIELD_INTEGER, "SecondaryFilterMode" ),
 
-DEFINE_INPUTFUNC(FIELD_STRING, "SetNewAttacker", InputSetNewAttacker),
-DEFINE_INPUTFUNC(FIELD_STRING, "SetNewInflictor", InputSetNewInflictor),
-DEFINE_INPUTFUNC(FIELD_STRING, "SetNewWeapon", InputSetNewWeapon),
+	DEFINE_INPUTFUNC( FIELD_STRING, "SetNewAttacker", InputSetNewAttacker ),
+	DEFINE_INPUTFUNC( FIELD_STRING, "SetNewInflictor", InputSetNewInflictor ),
+	DEFINE_INPUTFUNC( FIELD_STRING, "SetNewWeapon", InputSetNewWeapon ),
 
 END_DATADESC()
 
@@ -2051,12 +2051,12 @@ END_DATADESC()
 // ###################################################################
 class CFilterDamageLogic : public CBaseFilterRedirect
 {
-	DECLARE_CLASS(CFilterDamageLogic, CBaseFilterRedirect);
+	DECLARE_CLASS( CFilterDamageLogic, CBaseFilterRedirect );
 	DECLARE_DATADESC();
 public:
-	bool PassesFinalDamageFilter(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool PassesFinalDamageFilter( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
-		bool bPassesFilter = !GetTargetFilter() || RedirectToDamageFilter(pCaller, info);
+		bool bPassesFilter = !GetTargetFilter() || RedirectToDamageFilter( pCaller, info );
 		if (!bPassesFilter)
 		{
 			if (m_iSecondaryFilterMode == 2)
@@ -2067,39 +2067,39 @@ public:
 
 		CBaseEntity *pActivator = info.GetAttacker();
 
-		m_OutInflictor.Set(info.GetInflictor(), pActivator, pCaller);
-		m_OutAttacker.Set(info.GetAttacker(), pActivator, pCaller);
-		m_OutWeapon.Set(info.GetWeapon(), pActivator, pCaller);
+		m_OutInflictor.Set( info.GetInflictor(), pActivator, pCaller );
+		m_OutAttacker.Set( info.GetAttacker(), pActivator, pCaller );
+		m_OutWeapon.Set( info.GetWeapon(), pActivator, pCaller );
 
-		m_OutDamage.Set(info.GetDamage(), pActivator, pCaller);
-		m_OutMaxDamage.Set(info.GetMaxDamage(), pActivator, pCaller);
-		m_OutBaseDamage.Set(info.GetBaseDamage(), pActivator, pCaller);
+		m_OutDamage.Set( info.GetDamage(), pActivator, pCaller );
+		m_OutMaxDamage.Set( info.GetMaxDamage(), pActivator, pCaller );
+		m_OutBaseDamage.Set( info.GetBaseDamage(), pActivator, pCaller );
 
-		m_OutDamageType.Set(info.GetDamageType(), pActivator, pCaller);
-		m_OutDamageCustom.Set(info.GetDamageCustom(), pActivator, pCaller);
-		m_OutDamageStats.Set(info.GetDamageStats(), pActivator, pCaller);
-		m_OutAmmoType.Set(info.GetAmmoType(), pActivator, pCaller);
+		m_OutDamageType.Set( info.GetDamageType(), pActivator, pCaller );
+		m_OutDamageCustom.Set( info.GetDamageCustom(), pActivator, pCaller );
+		m_OutDamageStats.Set( info.GetDamageStats(), pActivator, pCaller );
+		m_OutAmmoType.Set( info.GetAmmoType(), pActivator, pCaller );
 
-		m_OutDamageForce.Set(info.GetDamageForce(), pActivator, pCaller);
-		m_OutDamagePosition.Set(info.GetDamagePosition(), pActivator, pCaller);
+		m_OutDamageForce.Set( info.GetDamageForce(), pActivator, pCaller );
+		m_OutDamagePosition.Set( info.GetDamagePosition(), pActivator, pCaller );
 
-		m_OutForceFriendlyFire.Set(info.IsForceFriendlyFire() ? 1 : 0, pActivator, pCaller);
+		m_OutForceFriendlyFire.Set( info.IsForceFriendlyFire() ? 1 : 0, pActivator, pCaller );
 
 		return bPassesFilter;
 	}
 
-	bool PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool PassesDamageFilterImpl( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
 		if (GetTargetFilter() && m_iSecondaryFilterMode != 2)
-			return RedirectToDamageFilter(pCaller, info);
+			return RedirectToDamageFilter( pCaller, info );
 
 		return true;
 	}
 
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
 		if (GetTargetFilter() && m_iSecondaryFilterMode != 2)
-			return RedirectToFilter(pCaller, pEntity);
+			return RedirectToFilter( pCaller, pEntity );
 
 		return true;
 	}
@@ -2129,30 +2129,30 @@ public:
 	COutputInt		m_OutForceFriendlyFire;
 };
 
-LINK_ENTITY_TO_CLASS(filter_damage_logic, CFilterDamageLogic);
+LINK_ENTITY_TO_CLASS( filter_damage_logic, CFilterDamageLogic );
 
-BEGIN_DATADESC(CFilterDamageLogic)
+BEGIN_DATADESC( CFilterDamageLogic )
 
-DEFINE_KEYFIELD(m_iSecondaryFilterMode, FIELD_INTEGER, "SecondaryFilterMode"),
+	DEFINE_KEYFIELD( m_iSecondaryFilterMode, FIELD_INTEGER, "SecondaryFilterMode" ),
 
-// Outputs
-DEFINE_OUTPUT(m_OutInflictor, "OutInflictor"),
-DEFINE_OUTPUT(m_OutAttacker, "OutAttacker"),
-DEFINE_OUTPUT(m_OutWeapon, "OutWeapon"),
+	// Outputs
+	DEFINE_OUTPUT( m_OutInflictor, "OutInflictor" ),
+	DEFINE_OUTPUT( m_OutAttacker, "OutAttacker" ),
+	DEFINE_OUTPUT( m_OutWeapon, "OutWeapon" ),
 
-DEFINE_OUTPUT(m_OutDamage, "OutDamage"),
-DEFINE_OUTPUT(m_OutMaxDamage, "OutMaxDamage"),
-DEFINE_OUTPUT(m_OutBaseDamage, "OutBaseDamage"),
+	DEFINE_OUTPUT( m_OutDamage, "OutDamage" ),
+	DEFINE_OUTPUT( m_OutMaxDamage, "OutMaxDamage" ),
+	DEFINE_OUTPUT( m_OutBaseDamage, "OutBaseDamage" ),
 
-DEFINE_OUTPUT(m_OutDamageType, "OutDamageType"),
-DEFINE_OUTPUT(m_OutDamageCustom, "OutDamageCustom"),
-DEFINE_OUTPUT(m_OutDamageStats, "OutDamageStats"),
-DEFINE_OUTPUT(m_OutAmmoType, "OutAmmoType"),
+	DEFINE_OUTPUT( m_OutDamageType, "OutDamageType" ),
+	DEFINE_OUTPUT( m_OutDamageCustom, "OutDamageCustom" ),
+	DEFINE_OUTPUT( m_OutDamageStats, "OutDamageStats" ),
+	DEFINE_OUTPUT( m_OutAmmoType, "OutAmmoType" ),
 
-DEFINE_OUTPUT(m_OutDamageForce, "OutDamageForce"),
-DEFINE_OUTPUT(m_OutDamagePosition, "OutDamagePosition"),
+	DEFINE_OUTPUT( m_OutDamageForce, "OutDamageForce" ),
+	DEFINE_OUTPUT( m_OutDamagePosition, "OutDamagePosition" ),
 
-DEFINE_OUTPUT(m_OutForceFriendlyFire, "OutForceFriendlyFire"),
+	DEFINE_OUTPUT( m_OutForceFriendlyFire, "OutForceFriendlyFire" ),
 
 END_DATADESC()
 #endif
@@ -2169,172 +2169,172 @@ ScriptHook_t	g_Hook_DamageMod;
 // ###################################################################
 class CFilterScript : public CBaseFilter
 {
-	DECLARE_CLASS(CFilterScript, CBaseFilter);
+	DECLARE_CLASS( CFilterScript, CBaseFilter );
 	DECLARE_DATADESC();
 	DECLARE_ENT_SCRIPTDESC();
 
 public:
-	bool PassesFilterImpl(CBaseEntity *pCaller, CBaseEntity *pEntity)
+	bool PassesFilterImpl( CBaseEntity *pCaller, CBaseEntity *pEntity )
 	{
-		if (!m_ScriptScope.IsInitialized())
+		if ( !m_ScriptScope.IsInitialized() )
 		{
-			Warning("%s: No script scope, cannot filter\n", GetDebugName());
+			Warning( "%s: No script scope, cannot filter\n", GetDebugName() );
 			return false;
 		}
 
-		if (g_Hook_PassesFilter.CanRunInScope(m_ScriptScope))
+		if ( g_Hook_PassesFilter.CanRunInScope( m_ScriptScope ) )
 		{
 			// caller, activator
 			ScriptVariant_t functionReturn;
-			ScriptVariant_t args[] = { ToHScript(pCaller), ToHScript(pEntity) };
-			g_Hook_PassesFilter.Call(m_ScriptScope, &functionReturn, args);
+			ScriptVariant_t args[] = { ToHScript( pCaller ), ToHScript( pEntity ) };
+			g_Hook_PassesFilter.Call( m_ScriptScope, &functionReturn, args );
 
 			return functionReturn.m_bool;
 		}
 
-		Warning("%s: No PassesFilter function\n", GetDebugName());
+		Warning( "%s: No PassesFilter function\n", GetDebugName() );
 		return false;
 	}
 
-	bool PassesDamageFilterImpl(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool PassesDamageFilterImpl( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
-		if (!m_ScriptScope.IsInitialized())
+		if ( !m_ScriptScope.IsInitialized() )
 		{
-			Warning("%s: No script scope, cannot filter\n", GetDebugName());
+			Warning( "%s: No script scope, cannot filter\n", GetDebugName() );
 			return false;
 		}
 
-		if (g_Hook_PassesDamageFilter.CanRunInScope(m_ScriptScope))
+		if ( g_Hook_PassesDamageFilter.CanRunInScope( m_ScriptScope ) )
 		{
-			HSCRIPT pInfo = g_pScriptVM->RegisterInstance(const_cast<CTakeDamageInfo*>(&info));
+			HSCRIPT pInfo = g_pScriptVM->RegisterInstance( const_cast<CTakeDamageInfo*>(&info) );
 
 			// caller, info
 			ScriptVariant_t functionReturn;
-			ScriptVariant_t args[] = { ToHScript(pCaller), pInfo };
-			g_Hook_PassesDamageFilter.Call(m_ScriptScope, &functionReturn, args);
+			ScriptVariant_t args[] = { ToHScript( pCaller ), pInfo };
+			g_Hook_PassesDamageFilter.Call( m_ScriptScope, &functionReturn, args );
 
-			g_pScriptVM->RemoveInstance(pInfo);
+			g_pScriptVM->RemoveInstance( pInfo );
 
 			return functionReturn.m_bool;
 		}
 
 		// Fall back to main filter function
-		return PassesFilterImpl(pCaller, info.GetAttacker());
+		return PassesFilterImpl( pCaller, info.GetAttacker() );
 	}
 
-	bool PassesFinalDamageFilter(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool PassesFinalDamageFilter( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
-		if (!m_ScriptScope.IsInitialized())
+		if ( !m_ScriptScope.IsInitialized() )
 		{
-			Warning("%s: No script scope, cannot filter\n", GetDebugName());
+			Warning( "%s: No script scope, cannot filter\n", GetDebugName() );
 			return false;
 		}
 
-		if (g_Hook_PassesFinalDamageFilter.CanRunInScope(m_ScriptScope))
+		if ( g_Hook_PassesFinalDamageFilter.CanRunInScope( m_ScriptScope ) )
 		{
-			HSCRIPT pInfo = g_pScriptVM->RegisterInstance(const_cast<CTakeDamageInfo*>(&info));
+			HSCRIPT pInfo = g_pScriptVM->RegisterInstance( const_cast<CTakeDamageInfo*>(&info) );
 
 			// caller, info
 			ScriptVariant_t functionReturn;
-			ScriptVariant_t args[] = { ToHScript(pCaller), pInfo };
-			g_Hook_PassesFinalDamageFilter.Call(m_ScriptScope, &functionReturn, args);
+			ScriptVariant_t args[] = { ToHScript( pCaller ), pInfo };
+			g_Hook_PassesFinalDamageFilter.Call( m_ScriptScope, &functionReturn, args );
 
-			g_pScriptVM->RemoveInstance(pInfo);
+			g_pScriptVM->RemoveInstance( pInfo );
 
 			return functionReturn.m_bool;
 		}
 
-		return BaseClass::PassesFinalDamageFilter(pCaller, info);
+		return BaseClass::PassesFinalDamageFilter( pCaller, info );
 	}
 
-	bool BloodAllowed(CBaseEntity *pCaller, const CTakeDamageInfo &info)
+	bool BloodAllowed( CBaseEntity *pCaller, const CTakeDamageInfo &info )
 	{
-		if (!m_ScriptScope.IsInitialized())
+		if ( !m_ScriptScope.IsInitialized() )
 		{
-			Warning("%s: No script scope, cannot filter\n", GetDebugName());
+			Warning( "%s: No script scope, cannot filter\n", GetDebugName() );
 			return false;
 		}
 
-		if (g_Hook_BloodAllowed.CanRunInScope(m_ScriptScope))
+		if ( g_Hook_BloodAllowed.CanRunInScope( m_ScriptScope ) )
 		{
-			HSCRIPT pInfo = g_pScriptVM->RegisterInstance(const_cast<CTakeDamageInfo*>(&info));
+			HSCRIPT pInfo = g_pScriptVM->RegisterInstance( const_cast<CTakeDamageInfo*>(&info) );
 
 			// caller, info
 			ScriptVariant_t functionReturn;
-			ScriptVariant_t args[] = { ToHScript(pCaller), pInfo };
-			g_Hook_BloodAllowed.Call(m_ScriptScope, &functionReturn, args);
+			ScriptVariant_t args[] = { ToHScript( pCaller ), pInfo };
+			g_Hook_BloodAllowed.Call( m_ScriptScope, &functionReturn, args );
 
-			g_pScriptVM->RemoveInstance(pInfo);
+			g_pScriptVM->RemoveInstance( pInfo );
 
 			return functionReturn.m_bool;
 		}
 
-		return BaseClass::BloodAllowed(pCaller, info);
+		return BaseClass::BloodAllowed( pCaller, info );
 	}
 
-	bool DamageMod(CBaseEntity *pCaller, CTakeDamageInfo &info)
+	bool DamageMod( CBaseEntity *pCaller, CTakeDamageInfo &info )
 	{
-		if (!m_ScriptScope.IsInitialized())
+		if ( !m_ScriptScope.IsInitialized() )
 		{
-			Warning("%s: No script scope, cannot filter\n", GetDebugName());
+			Warning( "%s: No script scope, cannot filter\n", GetDebugName() );
 			return false;
 		}
 
-		if (g_Hook_DamageMod.CanRunInScope(m_ScriptScope))
+		if ( g_Hook_DamageMod.CanRunInScope( m_ScriptScope ) )
 		{
-			HSCRIPT pInfo = g_pScriptVM->RegisterInstance(&info);
+			HSCRIPT pInfo = g_pScriptVM->RegisterInstance( &info );
 
 			// caller, info
 			ScriptVariant_t functionReturn;
-			ScriptVariant_t args[] = { ToHScript(pCaller), pInfo };
-			g_Hook_DamageMod.Call(m_ScriptScope, &functionReturn, args);
+			ScriptVariant_t args[] = { ToHScript( pCaller ), pInfo };
+			g_Hook_DamageMod.Call( m_ScriptScope, &functionReturn, args );
 
-			g_pScriptVM->RemoveInstance(pInfo);
+			g_pScriptVM->RemoveInstance( pInfo );
 
 			return functionReturn.m_bool;
 		}
 
-		return BaseClass::DamageMod(pCaller, info);
+		return BaseClass::DamageMod( pCaller, info );
 	}
 };
 
-LINK_ENTITY_TO_CLASS(filter_script, CFilterScript);
+LINK_ENTITY_TO_CLASS( filter_script, CFilterScript );
 
-BEGIN_DATADESC(CFilterScript)
+BEGIN_DATADESC( CFilterScript )
 END_DATADESC()
 
-BEGIN_ENT_SCRIPTDESC(CFilterScript, CBaseFilter, "The filter_script entity which allows VScript functions to hook onto filter methods.")
+BEGIN_ENT_SCRIPTDESC( CFilterScript, CBaseFilter, "The filter_script entity which allows VScript functions to hook onto filter methods." )
 
-// 
-// Hooks
-// 
+	// 
+	// Hooks
+	// 
 
-// The CFilterScript class is visible in the help string, so "A hook used by filter_script" is redundant, but these names are also
-// used for functions in CBaseFilter. In order to reduce confusion, the description emphasizes that these are hooks.
-BEGIN_SCRIPTHOOK(g_Hook_PassesFilter, "PassesFilter", FIELD_BOOLEAN, "A hook used by filter_script to determine what entities should pass it. Return true if the entity should pass or false if it should not. This hook is required for regular filtering.")
-DEFINE_SCRIPTHOOK_PARAM("caller", FIELD_HSCRIPT)
-DEFINE_SCRIPTHOOK_PARAM("activator", FIELD_HSCRIPT)
-END_SCRIPTHOOK()
+	// The CFilterScript class is visible in the help string, so "A hook used by filter_script" is redundant, but these names are also
+	// used for functions in CBaseFilter. In order to reduce confusion, the description emphasizes that these are hooks.
+	BEGIN_SCRIPTHOOK( g_Hook_PassesFilter, "PassesFilter", FIELD_BOOLEAN, "A hook used by filter_script to determine what entities should pass it. Return true if the entity should pass or false if it should not. This hook is required for regular filtering." )
+		DEFINE_SCRIPTHOOK_PARAM( "caller", FIELD_HSCRIPT )
+		DEFINE_SCRIPTHOOK_PARAM( "activator", FIELD_HSCRIPT )
+	END_SCRIPTHOOK()
 
-BEGIN_SCRIPTHOOK(g_Hook_PassesDamageFilter, "PassesDamageFilter", FIELD_BOOLEAN, "A hook used by filter_script to determine what damage should pass it when it's being used as a damage filter. Return true if the info should pass or false if it should not. If this hook is not defined in a filter_script, damage filter requests will instead check PassesFilter with the attacker as the activator.")
-DEFINE_SCRIPTHOOK_PARAM("caller", FIELD_HSCRIPT)
-DEFINE_SCRIPTHOOK_PARAM("info", FIELD_HSCRIPT)
-END_SCRIPTHOOK()
+	BEGIN_SCRIPTHOOK( g_Hook_PassesDamageFilter, "PassesDamageFilter", FIELD_BOOLEAN, "A hook used by filter_script to determine what damage should pass it when it's being used as a damage filter. Return true if the info should pass or false if it should not. If this hook is not defined in a filter_script, damage filter requests will instead check PassesFilter with the attacker as the activator." )
+		DEFINE_SCRIPTHOOK_PARAM( "caller", FIELD_HSCRIPT )
+		DEFINE_SCRIPTHOOK_PARAM( "info", FIELD_HSCRIPT )
+	END_SCRIPTHOOK()
 
-BEGIN_SCRIPTHOOK(g_Hook_PassesFinalDamageFilter, "PassesFinalDamageFilter", FIELD_BOOLEAN, "A completely optional hook used by filter_script which only runs when the entity will take damage. This is different from PassesDamageFilter, which is sometimes used in cases where damage is not actually about to be taken. This also runs after a regular PassesDamageFilter check. Return true if the info should pass or false if it should not. If this hook is not defined, it will always return true.")
-DEFINE_SCRIPTHOOK_PARAM("caller", FIELD_HSCRIPT)
-DEFINE_SCRIPTHOOK_PARAM("info", FIELD_HSCRIPT)
-END_SCRIPTHOOK()
+	BEGIN_SCRIPTHOOK( g_Hook_PassesFinalDamageFilter, "PassesFinalDamageFilter", FIELD_BOOLEAN, "A completely optional hook used by filter_script which only runs when the entity will take damage. This is different from PassesDamageFilter, which is sometimes used in cases where damage is not actually about to be taken. This also runs after a regular PassesDamageFilter check. Return true if the info should pass or false if it should not. If this hook is not defined, it will always return true." )
+		DEFINE_SCRIPTHOOK_PARAM( "caller", FIELD_HSCRIPT )
+		DEFINE_SCRIPTHOOK_PARAM( "info", FIELD_HSCRIPT )
+	END_SCRIPTHOOK()
 
-BEGIN_SCRIPTHOOK(g_Hook_BloodAllowed, "BloodAllowed", FIELD_BOOLEAN, "A completely optional hook used by filter_script to determine if a caller is allowed to emit blood after taking damage. Return true if blood should be allowed or false if it should not. If this hook is not defined, it will always return true.")
-DEFINE_SCRIPTHOOK_PARAM("caller", FIELD_HSCRIPT)
-DEFINE_SCRIPTHOOK_PARAM("info", FIELD_HSCRIPT)
-END_SCRIPTHOOK()
+	BEGIN_SCRIPTHOOK( g_Hook_BloodAllowed, "BloodAllowed", FIELD_BOOLEAN, "A completely optional hook used by filter_script to determine if a caller is allowed to emit blood after taking damage. Return true if blood should be allowed or false if it should not. If this hook is not defined, it will always return true." )
+		DEFINE_SCRIPTHOOK_PARAM( "caller", FIELD_HSCRIPT )
+		DEFINE_SCRIPTHOOK_PARAM( "info", FIELD_HSCRIPT )
+	END_SCRIPTHOOK()
 
-BEGIN_SCRIPTHOOK(g_Hook_DamageMod, "DamageMod", FIELD_BOOLEAN, "A completely optional hook used by filter_script to modify damage being taken by an entity. You are free to use CTakeDamageInfo functions on the damage info handle and it will change how the caller is damaged. Returning true or false currently has no effect on vanilla code, but you should generally return true if the damage info has been modified by your code and false if it was not. If this hook is not defined, it will always return false.")
-DEFINE_SCRIPTHOOK_PARAM("caller", FIELD_HSCRIPT)
-DEFINE_SCRIPTHOOK_PARAM("info", FIELD_HSCRIPT)
-END_SCRIPTHOOK()
+	BEGIN_SCRIPTHOOK( g_Hook_DamageMod, "DamageMod", FIELD_BOOLEAN, "A completely optional hook used by filter_script to modify damage being taken by an entity. You are free to use CTakeDamageInfo functions on the damage info handle and it will change how the caller is damaged. Returning true or false currently has no effect on vanilla code, but you should generally return true if the damage info has been modified by your code and false if it was not. If this hook is not defined, it will always return false." )
+		DEFINE_SCRIPTHOOK_PARAM( "caller", FIELD_HSCRIPT )
+		DEFINE_SCRIPTHOOK_PARAM( "info", FIELD_HSCRIPT )
+	END_SCRIPTHOOK()
 
 END_SCRIPTDESC()
 #endif

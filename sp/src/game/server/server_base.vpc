@@ -21,6 +21,9 @@ $Include "$SRCDIR\game\protobuf_include.vpc"
 // Mapbase stuff
 $Include "$SRCDIR\game\server\server_mapbase.vpc"	[$MAPBASE]
 
+// Server side hl2beta
+$Include "$SRCDIR\game\server\server_hl2beta.vpc"
+
 $Configuration	"Debug"
 {
 	$General
@@ -773,7 +776,7 @@ $Project
 			$File	"te_explosion.cpp"
 			$File	"te_fizz.cpp"
 			$File	"te_footprintdecal.cpp"
-			$File	"hl2_retail\te_gaussexplosion.cpp"
+			$File	"hl2\te_gaussexplosion.cpp"
 			$File	"te_glassshatter.cpp"
 			$File	"te_glowsprite.cpp"
 			$File	"te_impact.cpp"
@@ -858,7 +861,7 @@ $Project
 		$File	"globals.h"
 		$File	"$SRCDIR\public\globalvars_base.h"
 		$File	"$SRCDIR\game\shared\groundlink.h"
-		$File	"$SRCDIR\game\shared\hl2_retail\hl2_vehicle_radar.h"
+		$File	"$SRCDIR\game\shared\hl2\hl2_vehicle_radar.h"
 		$File	"$SRCDIR\public\iachievementmgr.h"
 		$File	"$SRCDIR\public\appframework\IAppSystem.h"
 		$File	"$SRCDIR\public\icliententity.h"

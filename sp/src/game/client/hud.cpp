@@ -1,7 +1,8 @@
-//========= Copyright Valve Corporation, MilkywayM16, All rights reserved. ============//
+ï»¿//========= Copyright Valve Corporation, All rights reserved. ============//
 //
-// This Code comes from this repo: https://github.com/MilkywayM16/hl2-old-hud
-// So Thanks MilkywayM16!
+// Purpose: 
+//
+// $NoKeywords: $
 //
 //=============================================================================//
 //
@@ -30,8 +31,6 @@
 #include "tier0/memdbgon.h"
 
 static 	CClassMemoryPool< CHudTexture >	 g_HudTextureMemoryPool( 128 );
-
-ConVar	EnableRetailHud("retail_hud", "0", FCVAR_ARCHIVE,"Enable the retail HALF-LIFE² hud");
 
 //-----------------------------------------------------------------------------
 // Purpose: Parses the weapon txt files to get the sprites needed.

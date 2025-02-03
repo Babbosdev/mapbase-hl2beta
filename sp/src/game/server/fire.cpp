@@ -18,7 +18,7 @@
 #include "collisionutils.h"
 #include "tier0/vprof.h"
 #ifdef MAPBASE
-#include "hl2_retail\weapon_flaregun.h"
+#include "weapon_flaregun.h"
 #include "mapbase/GlobalStrings.h"
 #endif
 

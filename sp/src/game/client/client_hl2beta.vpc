@@ -1,0 +1,34 @@
+// CLIENT SIDE HL2BETA VPC SCRIPT
+
+$Configuration
+{
+	$Compiler
+	{
+		$PreprocessorDefinitions		"$BASE;MAPBASE" [$MAPBASE]
+	}
+}
+
+$Project
+{
+	$Folder	"Source Files"
+	{
+
+		$Folder	"HL2 BETA DLL"
+		{
+		// Other
+	    $File	"hl2beta\c_weapon__stubs_hl2_leak.cpp"
+		// In game hud
+		$File	"hl2beta\leak_hudammo.cpp"
+		$File	"hl2beta\leak_hudbattery.cpp"
+		$File	"hl2beta\leak_hudflashlight.cpp"
+		$File	"hl2beta\leak_hudhealth.cpp"
+		$File	"hl2beta\leak_hudquickinfo.cpp"
+		$File	"hl2beta\leak_hudsuitpower.cpp"
+		$File	"hl2beta\leak_hudsuitpower.h"
+		$File	"hl2beta\leak_hudweaponselection.cpp"
+		$File	"hl2beta\parsemsg.cpp"
+		$File	"hl2beta\parsemsg.h"		
+		}
+		
+	}
+}
