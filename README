@@ -1,5 +1,24 @@
 //=========================================================================================================================
 
+               Project Mapbase-hl2beta
+	https://github.com/Babbosdev/mapbase-hl2beta
+	
+//=========================================================================================================================
+
+>>>>>>>> EXTERNAL CONTENT USED <<<<<<<<
+
+THIS REPO USES HALF-LIFE 2 CODE FROM THE LEAK SO YOU CAN'T USE THIS REPO FOR COMMERCIAL PURPORSES.
+
+1. Leaknet by VXP for some fixed code.
+https://leaknet.org/
+
+2. MilkywayM16's fork of Source 2013
+https://github.com/MilkywayM16/hl2-old-hud
+
+
+
+//=========================================================================================================================
+
                Mapbase v7.3 - Source 2013
 	https://github.com/mapbase-source/source-sdk-2013
 		https://www.moddb.com/mods/mapbase
@@ -233,7 +252,7 @@ THIS DOCUMENT DESCRIBES A CONTRACT BETWEEN YOU AND VALVE
 CORPORATION ("Valve").  PLEASE READ IT BEFORE DOWNLOADING OR USING 
 THE SOURCE ENGINE SDK ("SDK"). BY DOWNLOADING AND/OR USING THE 
 SOURCE ENGINE SDK YOU ACCEPT THIS LICENSE. IF YOU DO NOT AGREE TO 
-THE TERMS OF THIS LICENSE PLEASE DON’T DOWNLOAD OR USE THE SDK.  
+THE TERMS OF THIS LICENSE PLEASE DON?T DOWNLOAD OR USE THE SDK.  
 
   You may, free of charge, download and use the SDK to develop a modified Valve game 
 running on the Source engine.  You may distribute your modified Valve game in source and 
